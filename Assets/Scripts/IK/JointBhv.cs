@@ -81,8 +81,6 @@ namespace ProceduralAnimation
                 _immediateChildJoints = this.ImmediateChildJoints;
 
                 _firstParentJoint = this.FirstParentJoint;
-
-                this.UpdateName();
             }
         }
 

@@ -35,6 +35,13 @@ namespace ProceduralAnimation
 
         public override void OnDrawGizmos()
         {
+            if (this.Attractor.Target != null)
+            {
+                Gizmos.color = this.WireColor;
+
+                Gizmos.DrawLine(this.Attractor.Target.Position, this.Attractor.EffectivePosition);
+            }
+
             if (this.Attractor.ProjectOntoTerrain && this.Attractor.Raycast(out RaycastHit hitInfo))
             {
                 Vector3 projectionOffset = .025f * Vector3.up;

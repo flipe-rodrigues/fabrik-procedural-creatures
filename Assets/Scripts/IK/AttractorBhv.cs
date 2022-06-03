@@ -15,8 +15,10 @@ namespace ProceduralAnimation
         [SerializeField] private float _lerpSpeed = 1;
 
         // Public properties
+        public TargetBhv Target => _target;
         public bool ProjectOntoTerrain => _projectOntoTerrain;
         public bool IsAttracting => _lerp < 1;
+        public Vector3 EffectivePosition { get => _effectivePosition; }
 
         // Private fields
         private Vector3 _effectivePosition;
@@ -29,6 +31,7 @@ namespace ProceduralAnimation
         {
             EditorApplication.update += this.Update;
         }
+
         private void OnDisable()
         {
             EditorApplication.update -= this.Update;

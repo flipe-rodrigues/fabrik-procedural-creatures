@@ -25,30 +25,30 @@ namespace ProceduralAnimation
         {
             base.OnInspectorGUI();
 
-            return;
+            //return;
 
-            InverseKinematicsBhv inverseKinematics = target as InverseKinematicsBhv;
+            //InverseKinematicsBhv inverseKinematics = target as InverseKinematicsBhv;
 
-            serializedObject.Update();
+            //serializedObject.Update();
 
-            EditorExtensions.ScriptHolder(target);
+            //EditorExtensions.ScriptHolder(target);
 
-            EditorGUILayout.Separator();
+            //EditorGUILayout.Separator();
 
-            EditorExtensions.PropertyField("Terrain Layer Mask", _terrainLayerMask);
+            //EditorExtensions.PropertyField("Terrain Layer Mask", _terrainLayerMask);
 
-            EditorExtensions.PropertyField("Snap To Terrain", _snapToTerrain);
+            //EditorExtensions.PropertyField("Snap To Terrain", _snapToTerrain);
 
-            if (_snapToTerrain.boolValue)
-            {
-                EditorGUI.indentLevel++;
+            //if (_snapToTerrain.boolValue)
+            //{
+            //    EditorGUI.indentLevel++;
 
-                EditorExtensions.PropertyField("Offset", _terrainOffset);
+            //    EditorExtensions.PropertyField("Offset", _terrainOffset);
 
-                EditorGUI.indentLevel--;
-            }
+            //    EditorGUI.indentLevel--;
+            //}
 
-            serializedObject.ApplyModifiedProperties();
+            //serializedObject.ApplyModifiedProperties();
         }
     }
 }

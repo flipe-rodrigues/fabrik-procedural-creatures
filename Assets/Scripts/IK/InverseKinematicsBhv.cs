@@ -70,7 +70,6 @@ namespace ProceduralAnimation
         [SerializeField, ReadOnly] private ChainBhv[] _chains;
         [SerializeField, ReadOnly] private TargetBhv[] _targets;
         [SerializeField, ReadOnly] private AttractorBhv[] _attractors;
-        [SerializeField, ReadOnly] private bool _isGrounded;
 
         private void Awake()
         {
@@ -81,17 +80,21 @@ namespace ProceduralAnimation
             _attractors = this.Attractors;
         }
 
-        private void Update()
+        public void ResetIKElements()
         {
-            _isGrounded = this.IsGrounded;
+            _chains = new ChainBhv[0];
+
+            _targets = new TargetBhv[0];
+
+            _attractors = new AttractorBhv[0];
         }
 
         private void LateUpdate()
         {
-            this.BRIK();
+            this.FRIK();
         }
 
-        private void BRIK()
+        private void FRIK()
         {
             foreach (ChainBhv chain in this.Chains.OrderByDescending(chain => chain.Depth))
             {
@@ -100,15 +103,16 @@ namespace ProceduralAnimation
 
             foreach (TargetBhv target in this.Targets.Where(target => target.IsActive).OrderBy(target => target.Priority))
             {
-                foreach (JointBhv effector in target.Effectors)
-                {
-                    if (effector == null)
-                    {
-                        continue;
-                    }
+                //foreach (JointBhv effector in target.Effector)
+                //{
+                //    if (effector == null)
+                //    {
+                //        continue;
+                //    }
 
-                    this.ResolveIK(effector, target);
-                }
+                //    this.ResolveIK(effector, target);
+                //}
+                this.ResolveIK(target.Effector, target);
             }
 
             foreach (ChainBhv chain in this.Chains.OrderByDescending(chain => chain.Depth))
@@ -120,24 +124,6 @@ namespace ProceduralAnimation
 
                 this.ApplyIK(chain);
             }
-
-            return;
-            //foreach (ChainBhv chain in this.Chains.OrderByDescending(chain => chain.Depth))
-            //{
-            //    this.SnapshotIK(chain);
-
-            //    foreach (TargetBhv target in chain.Targets.Where(target => target.IsActive).OrderBy(target => target.Priority))
-            //    {
-            //        this.ResolveIK(chain, target);
-            //    }
-
-            //    if (_snapToTerrain)
-            //    {
-            //        this.SnapIKToTerrain(chain);
-            //    }
-
-            //    this.ApplyIK(chain);
-            //}
         }
 
         private void SnapshotIK(ChainBhv chain)
@@ -150,6 +136,11 @@ namespace ProceduralAnimation
 
         private void ResolveIK(JointBhv effector, TargetBhv target)
         {
+            if (effector == null)
+            {
+                return;
+            }
+
             effector.TentativePosition = target.EffectivePosition;
 
             for (int i = effector.Index - 1; i >= 0; i--)

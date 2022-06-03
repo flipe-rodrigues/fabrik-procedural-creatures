@@ -19,5 +19,5 @@ MonoBehaviour:
   item3: 'attractor gizmo isactive think of smth
 
 '
-  item4: 
-  item5: 
+  item4: physX
+  item5: nested

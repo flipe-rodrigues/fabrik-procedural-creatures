@@ -5,6 +5,7 @@ using UnityEngine;
 
 namespace ProceduralAnimation
 {
+    [ExecuteInEditMode]
     public abstract class IKElementBhv : CachedTransformBhv
     {
         // Protected properties
@@ -27,6 +28,16 @@ namespace ProceduralAnimation
         private void Awake()
         {
             _inverseKinematics = this.IK;
+        }
+
+        private void OnEnable()
+        {
+            this.IK.ResetIKElements();
+        }
+
+        private void OnDisable()
+        {
+            this.IK.ResetIKElements();
         }
 
         private void LateUpdate()

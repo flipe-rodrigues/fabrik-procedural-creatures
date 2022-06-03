@@ -9,13 +9,13 @@ namespace ProceduralAnimation
     public class TargetBhv : IKElementBhv
     {
         // Serialized fields
-        [SerializeField] private JointBhv[] _effectors = new JointBhv[1];
+        [SerializeField] private JointBhv _effector;
         [SerializeField] private bool _isActive;
         [SerializeField, Min(0)] private int _priority;
         [SerializeField, Min(0)] private float _deadZoneRadius;
 
         // Public properties
-        public JointBhv[] Effectors { get => _effectors; set => _effectors = value; }
+        public JointBhv Effector { get => _effector; set => _effector = value; }
         public bool IsActive { get => _isActive; }
         public int Priority { get => _priority; }
         public float DeadZoneRadius { get => _deadZoneRadius; }
@@ -51,12 +51,14 @@ namespace ProceduralAnimation
 
         public override void UpdateName()
         {
-            string sufix = "________";
+            //string sufix = "________";
 
-            if (this.Effectors.Any(effector => effector != null))
-            {
-                sufix = this.Effectors.Where(effector => effector != null).Select(effector => effector.name).Aggregate((current, next) => current + ", " + next);
-            }
+            //if (this.Effector.Any(effector => effector != null))
+            //{
+            //    sufix = this.Effector.Where(effector => effector != null).Select(effector => effector.name).Aggregate((current, next) => current + ", " + next);
+            //}
+
+            string sufix = _effector == null ? "________" : _effector.name;
 
             this.name = "Target" + " < " + sufix;
         }

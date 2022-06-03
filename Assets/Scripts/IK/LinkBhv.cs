@@ -46,14 +46,6 @@ namespace ProceduralAnimation
             this.UpdateScale();
         }
 
-        private void LateUpdate()
-        {
-            if (!Application.isPlaying)
-            {
-                this.UpdateName();
-            }
-        }
-
         private void ValidateScale()
         {
             _scale = new Vector3(Mathf.Max(0, _scale.x), Mathf.Max(0, _scale.y), Mathf.Max(0, _scale.z));
