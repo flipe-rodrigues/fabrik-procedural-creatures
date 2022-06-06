@@ -10,76 +10,52 @@ namespace ProceduralAnimation
     [ExecuteInEditMode]
     public class JointBhv : ChainElementBhv
     {
-        public struct Data
-        {
-            private Vector3 _position;
-            public Vector3 TentativePosition { get; set; }
-
-            public Data(JointBhv joint)
-            {
-                _position = joint.Position;
-
-                TentativePosition = _position;
-            }
-
-            public void Update()
-            {
-
-            }
-        }
+        // Serialized fields
+        [SerializeField, ReadOnly] private JointBhv[] _upstreamJoints;
+        [SerializeField, ReadOnly] private JointBhv[] _downstreamJoints;
+        [SerializeField] private LinkBhv _link;
+        [SerializeField, ReadOnly] private int _depth;
 
         // Public properties
-        public ChainBhv[] ImmediateChildChains
+        public JointBhv[] UpstreamJoints
         {
             get
             {
-                if (_immediateChildChains == null || _immediateChildChains.Length == 0)
-                {
-                    _immediateChildChains = this.GetComponentsInImmediateChildren<ChainBhv>();
-                }
-
-                return _immediateChildChains;
-            }
-        }
-        public JointBhv[] ImmediateChildJoints
-        {
-            get
-            {
-                if (_immediateChildJoints == null || _immediateChildJoints.Length == 0)
-                {
-                    _immediateChildJoints = this.ImmediateChildChains.Select(chain => chain.Joints[0]).Union(this.GetComponentsInImmediateChildren<JointBhv>()).ToArray();
-                }
-
-                return _immediateChildJoints;
-            }
-        }
-        public JointBhv FirstParentJoint
-        {
-            get
-            {
-                if (_firstParentJoint == null)
+                if (!Application.isPlaying || _upstreamJoints == null || _upstreamJoints.Length == 0)
                 {
                     if (this.GetComponentsInParentsExclusively<JointBhv>().Length > 0)
                     {
-                        _firstParentJoint = this.GetComponentsInParentsExclusively<JointBhv>().First();
+                        _upstreamJoints = this.GetComponentsInParentsExclusively<JointBhv>().Where(joint => Mathf.Abs(this.Depth - joint.Depth) == 1).ToArray();
                     }
                 }
 
-                return _firstParentJoint;
+                return _upstreamJoints;
             }
         }
+        public JointBhv[] DownstreamJoints
+        {
+            get
+            {
+                if (!Application.isPlaying || _downstreamJoints == null || _downstreamJoints.Length == 0)
+                {
+                    if (this.GetComponentsInChildrenExclusively<JointBhv>().Length > 0)
+                    {
+                        _downstreamJoints = this.GetComponentsInChildrenExclusively<JointBhv>().Where(joint => Mathf.Abs(this.Depth - joint.Depth) == 1).ToArray();
+                    }
+                }
+
+                return _downstreamJoints;
+            }
+        }
+        public LinkBhv Link => _link; // this.Chain.Links[this.Index];
         public Vector3 TentativePosition { get => _tentativePosition; set => _tentativePosition = value; }
         public Vector3 TentativeUpDirection { get => _tentativeUpDirection; set => _tentativeUpDirection = value; }
+        private bool HasLink => _link != null;
+        public int Depth => _depth;
 
         // Private fields
-        [SerializeField, ReadOnly] private ChainBhv[] _immediateChildChains;
-        [SerializeField, ReadOnly] private JointBhv[] _immediateChildJoints;
-        private JointBhv _firstParentJoint;
         private Vector3 _tentativePosition;
         private Vector3 _tentativeUpDirection;
-        private int _parentJointCount;
-        private int _childJointCount;
-        private int _immediateChildChainCount;
 
         public override void PseudoConstructor(ChainBhv chain, int index)
         {
@@ -94,17 +70,66 @@ namespace ProceduralAnimation
         {
             if (!Application.isPlaying)
             {
-                _immediateChildChains = this.ImmediateChildChains;
+                _depth = this.GetComponentsInParentsExclusively<JointBhv>().Length;
 
-                _immediateChildJoints = this.ImmediateChildJoints;
+                _upstreamJoints = this.UpstreamJoints;
 
-                _firstParentJoint = this.FirstParentJoint;
+                _downstreamJoints = this.DownstreamJoints;
+
+                //_link = this.Chain.Links[this.Index];
             }
+        }
+
+        private void UpdatePosition()
+        {
+            //this.Position = 
         }
 
         public override void UpdateName()
         {
             this.name = "Joint " + "(" + this.Index + " - " + this.Chain.name + ")";
+        }
+
+        public void PropagateUpstream(JointBhv source)
+        {
+            foreach (JointBhv upstreamJoint in this.UpstreamJoints)
+            {
+                if (!upstreamJoint.HasLink)
+                {
+                    continue;
+                }
+
+                Vector3 direction = (upstreamJoint.TentativePosition - this.TentativePosition).normalized;
+
+                upstreamJoint.TentativePosition = this.TentativePosition + upstreamJoint.Link.Length * direction;
+
+                upstreamJoint.PropagateUpstream(this);
+
+                foreach (JointBhv downstreamJoint in upstreamJoint.DownstreamJoints)
+                {
+                    if (downstreamJoint != source)
+                    {
+                        upstreamJoint.PropagateDownstream(this);
+                    }
+                }
+            }
+        }
+
+        public void PropagateDownstream(JointBhv source)
+        {
+            foreach (JointBhv downstreamJoint in this.DownstreamJoints)
+            {
+                if (!this.HasLink)
+                {
+                    continue;
+                }
+
+                Vector3 direction = (downstreamJoint.TentativePosition - this.TentativePosition).normalized;
+
+                downstreamJoint.TentativePosition = this.TentativePosition + this.Link.Length * direction;
+
+                downstreamJoint.PropagateDownstream(this);
+            }
         }
     }
 }

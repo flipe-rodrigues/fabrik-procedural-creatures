@@ -7,14 +7,6 @@ using Unity.Jobs;
 
 namespace ProceduralAnimation
 {
-    public struct IKUpdateJob : IJobParallelFor
-    {
-        public void Execute(int index)
-        {
-            throw new System.NotImplementedException();
-        }
-    }
-
     [ExecuteInEditMode]
     public class InverseKinematicsBhv : MonoBehaviour
     {
@@ -34,7 +26,7 @@ namespace ProceduralAnimation
         {
             get
             {
-                if (_chains == null || _chains.Length == 0)
+                if (!Application.isPlaying || _chains == null || _chains.Length == 0)
                 {
                     _chains = this.GetComponentsInChildren<ChainBhv>();
                 }
@@ -42,11 +34,23 @@ namespace ProceduralAnimation
                 return _chains;
             }
         }
+        private JointBhv[] Joints
+        {
+            get
+            {
+                if (!Application.isPlaying || _joints == null || _chains.Length == 0)
+                {
+                    _joints = this.GetComponentsInChildren<JointBhv>();
+                }
+
+                return _joints;
+            }
+        }
         public TargetBhv[] Targets
         {
             get
             {
-                if (_targets == null || _targets.Length == 0)
+                if (!Application.isPlaying || _targets == null || _targets.Length == 0)
                 {
                     _targets = this.GetComponentsInChildren<TargetBhv>();
                 }
@@ -62,7 +66,7 @@ namespace ProceduralAnimation
         {
             get
             {
-                if (_attractors == null || _attractors.Length == 0)
+                if (!Application.isPlaying || _attractors == null || _attractors.Length == 0)
                 {
                     _attractors = this.GetComponentsInChildren<AttractorBhv>();
                 }
@@ -77,6 +81,7 @@ namespace ProceduralAnimation
 
         // Private fields
         [SerializeField, ReadOnly] private ChainBhv[] _chains;
+        [SerializeField, ReadOnly] private JointBhv[] _joints;
         [SerializeField, ReadOnly] private TargetBhv[] _targets;
         [SerializeField, ReadOnly] private AttractorBhv[] _attractors;
 
@@ -84,18 +89,11 @@ namespace ProceduralAnimation
         {
             _chains = this.Chains;
 
+            _joints = this.Joints;
+
             _targets = this.Targets;
 
             _attractors = this.Attractors;
-        }
-
-        public void ResetIKElements()
-        {
-            _chains = new ChainBhv[0];
-
-            _targets = new TargetBhv[0];
-
-            _attractors = new AttractorBhv[0];
         }
 
         private void LateUpdate()
@@ -105,37 +103,31 @@ namespace ProceduralAnimation
 
         private void FRIK()
         {
-            foreach (ChainBhv chain in this.Chains.OrderByDescending(chain => chain.Depth))
-            {
-                this.SnapshotIK(chain);
-            }
+            this.SnapshotIK();
 
             foreach (TargetBhv target in this.Targets.Where(target => target.IsActive).OrderBy(target => target.Priority))
             {
                 this.ResolveIK(target.Effector, target);
             }
 
-            //foreach (TargetBhv target in this.Targets.Where(target => target.IsActive & target.Priority == 0))
-            //{
-            //    this.BendIK(target.Effector.Chain, target);
-            //}
-
-            foreach (ChainBhv chain in this.Chains.OrderByDescending(chain => chain.Depth))
+            foreach (JointBhv joint in this.Joints)
             {
-                if (_snapToTerrain)
-                {
-                    this.SnapIKToTerrain(chain);
-                }
-
-                this.ApplyIK(chain);
+                //
             }
+
+            if (_snapToTerrain)
+            {
+                this.SnapIKToTerrain();
+            }
+
+            this.ApplyIK();
         }
 
-        private void SnapshotIK(ChainBhv chain)
+        private void SnapshotIK()
         {
-            for (int i = 0; i < chain.Joints.Length; i++)
+            foreach (JointBhv joint in this.Joints)
             {
-                chain.Joints[i].TentativePosition = chain.Joints[i].Position;
+                joint.TentativePosition = joint.Position;
             }
         }
 
@@ -148,78 +140,58 @@ namespace ProceduralAnimation
 
             effector.TentativePosition = target.EffectivePosition;
 
-            for (int i = effector.Index - 1; i >= 0; i--)
-            {
-                Vector3 direction = (effector.Chain.Joints[i + 1].TentativePosition - effector.Chain.Joints[i].TentativePosition).normalized;
+            effector.PropagateUpstream(effector);
 
-                effector.Chain.Joints[i].TentativePosition = effector.Chain.Joints[i + 1].TentativePosition - effector.Chain.Links[i].Length * direction;
-            }
-
-            for (int i = effector.Index + 1; i < effector.Chain.Joints.Length; i++)
-            {
-                Vector3 direction = (effector.Chain.Joints[i].TentativePosition - effector.Chain.Joints[i - 1].TentativePosition).normalized;
-
-                effector.Chain.Joints[i].TentativePosition = effector.Chain.Joints[i - 1].TentativePosition + effector.Chain.Links[i - 1].Length * direction;
-            }
+            effector.PropagateDownstream(effector);
         }
 
-        private void BendIK(ChainBhv chain, TargetBhv hint)
+        private void SnapIKToTerrain()
         {
-            if (hint == null)
+            foreach (JointBhv joint in this.Joints)
             {
-                return;
-            }
-
-            for (int i = 1; i < chain.Joints.Length - 1; i++)
-            {
-                Vector3 planeNormal = (chain.Joints[i + 1].TentativePosition - chain.Joints[i - 1].TentativePosition).normalized;
-
-                Plane plane = new Plane(planeNormal, chain.Joints[i - 1].TentativePosition);
-
-                Vector3 hintProjection = plane.ClosestPointOnPlane(hint.EffectivePosition);
-
-                Vector3 jointProjection = plane.ClosestPointOnPlane(chain.Joints[i].TentativePosition);
-
-                float angle = Vector3.SignedAngle(jointProjection - chain.Joints[i - 1].TentativePosition, hintProjection - chain.Joints[i - 1].TentativePosition, planeNormal);
-
-                chain.Joints[i].TentativePosition = Quaternion.AngleAxis(angle, planeNormal) * (chain.Joints[i].TentativePosition - chain.Joints[i - 1].TentativePosition) + chain.Joints[i - 1].TentativePosition;
-            }
-        }
-
-        private void SnapIKToTerrain(ChainBhv chain)
-        {
-            for (int i = 0; i < chain.Joints.Length; i++)
-            {
-                if (Physics.Raycast(chain.Joints[i].Position + 100 * Vector3.up, Vector3.down, out RaycastHit hitInfo, Mathf.Infinity, _terrainLayerMask))
+                if (Physics.Raycast(joint.Position + 100 * Vector3.up, Vector3.down, out RaycastHit hitInfo, Mathf.Infinity, _terrainLayerMask))
                 {
-                    chain.Joints[i].TentativePosition = new Vector3(chain.Joints[i].TentativePosition.x, hitInfo.point.y + _terrainOffset, chain.Joints[i].TentativePosition.z);
+                    joint.TentativePosition = new Vector3(joint.TentativePosition.x, hitInfo.point.y + _terrainOffset, joint.TentativePosition.z);
 
-                    chain.Joints[i].TentativeUpDirection = hitInfo.normal;
+                    joint.TentativeUpDirection = hitInfo.normal;
                 }
             }
         }
 
-        private void ApplyIK(ChainBhv chain)
+        private void ApplyIK()
         {
-            for (int i = 0; i < chain.Joints.Length; i++)
+            foreach (JointBhv joint in this.Joints)
             {
                 Vector3 forward, up;
 
-                if (i == chain.Joints.Length - 1)
-                {
-                    forward = chain.Joints[i - 1].Forward;
-                }
-                else
-                {
-                    forward = (chain.Joints[i + 1].TentativePosition - chain.Joints[i].TentativePosition).normalized;
-                }
+                forward = (joint.DownstreamJoints.Select(joint => joint.TentativePosition).Mean() - joint.TentativePosition).normalized;
 
-                up = _snapToTerrain ? chain.Joints[i].TentativeUpDirection : Vector3.up;
+                up = _snapToTerrain ? joint.TentativeUpDirection : Vector3.up;
 
-                chain.Joints[i].Rotation = Quaternion.LookRotation(forward, up);
+                joint.Rotation = Quaternion.LookRotation(forward, up);
 
-                chain.Joints[i].Position = chain.Joints[i].TentativePosition;
+                joint.Position = joint.TentativePosition;
             }
+
+            //for (int i = 0; i < chain.Joints.Length; i++)
+            //{
+            //    Vector3 forward, up;
+
+            //    if (i == chain.Joints.Length - 1)
+            //    {
+            //        forward = chain.Joints[i - 1].Forward;
+            //    }
+            //    else
+            //    {
+            //        forward = (chain.Joints[i + 1].TentativePosition - chain.Joints[i].TentativePosition).normalized;
+            //    }
+
+            //    up = _snapToTerrain ? chain.Joints[i].TentativeUpDirection : Vector3.up;
+
+            //    chain.Joints[i].Rotation = Quaternion.LookRotation(forward, up);
+
+            //    chain.Joints[i].Position = chain.Joints[i].TentativePosition;
+            //}
         }
     }
 }
