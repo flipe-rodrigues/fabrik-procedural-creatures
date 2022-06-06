@@ -3,9 +3,18 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
+using Unity.Jobs;
 
 namespace ProceduralAnimation
 {
+    public struct IKUpdateJob : IJobParallelFor
+    {
+        public void Execute(int index)
+        {
+            throw new System.NotImplementedException();
+        }
+    }
+
     [ExecuteInEditMode]
     public class InverseKinematicsBhv : MonoBehaviour
     {
@@ -103,17 +112,13 @@ namespace ProceduralAnimation
 
             foreach (TargetBhv target in this.Targets.Where(target => target.IsActive).OrderBy(target => target.Priority))
             {
-                //foreach (JointBhv effector in target.Effector)
-                //{
-                //    if (effector == null)
-                //    {
-                //        continue;
-                //    }
-
-                //    this.ResolveIK(effector, target);
-                //}
                 this.ResolveIK(target.Effector, target);
             }
+
+            //foreach (TargetBhv target in this.Targets.Where(target => target.IsActive & target.Priority == 0))
+            //{
+            //    this.BendIK(target.Effector.Chain, target);
+            //}
 
             foreach (ChainBhv chain in this.Chains.OrderByDescending(chain => chain.Depth))
             {
@@ -155,6 +160,29 @@ namespace ProceduralAnimation
                 Vector3 direction = (effector.Chain.Joints[i].TentativePosition - effector.Chain.Joints[i - 1].TentativePosition).normalized;
 
                 effector.Chain.Joints[i].TentativePosition = effector.Chain.Joints[i - 1].TentativePosition + effector.Chain.Links[i - 1].Length * direction;
+            }
+        }
+
+        private void BendIK(ChainBhv chain, TargetBhv hint)
+        {
+            if (hint == null)
+            {
+                return;
+            }
+
+            for (int i = 1; i < chain.Joints.Length - 1; i++)
+            {
+                Vector3 planeNormal = (chain.Joints[i + 1].TentativePosition - chain.Joints[i - 1].TentativePosition).normalized;
+
+                Plane plane = new Plane(planeNormal, chain.Joints[i - 1].TentativePosition);
+
+                Vector3 hintProjection = plane.ClosestPointOnPlane(hint.EffectivePosition);
+
+                Vector3 jointProjection = plane.ClosestPointOnPlane(chain.Joints[i].TentativePosition);
+
+                float angle = Vector3.SignedAngle(jointProjection - chain.Joints[i - 1].TentativePosition, hintProjection - chain.Joints[i - 1].TentativePosition, planeNormal);
+
+                chain.Joints[i].TentativePosition = Quaternion.AngleAxis(angle, planeNormal) * (chain.Joints[i].TentativePosition - chain.Joints[i - 1].TentativePosition) + chain.Joints[i - 1].TentativePosition;
             }
         }
 

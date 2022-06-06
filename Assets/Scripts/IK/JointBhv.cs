@@ -10,6 +10,24 @@ namespace ProceduralAnimation
     [ExecuteInEditMode]
     public class JointBhv : ChainElementBhv
     {
+        public struct Data
+        {
+            private Vector3 _position;
+            public Vector3 TentativePosition { get; set; }
+
+            public Data(JointBhv joint)
+            {
+                _position = joint.Position;
+
+                TentativePosition = _position;
+            }
+
+            public void Update()
+            {
+
+            }
+        }
+
         // Public properties
         public ChainBhv[] ImmediateChildChains
         {

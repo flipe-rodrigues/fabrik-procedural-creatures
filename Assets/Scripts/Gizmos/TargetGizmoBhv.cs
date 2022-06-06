@@ -44,16 +44,6 @@ namespace ProceduralAnimation
 
                 Gizmos.DrawLine(this.Target.Position, this.Target.EffectivePosition);
 
-                //foreach (JointBhv endEffector in this.Target.Effector)
-                //{
-                //    if (endEffector == null)
-                //    {
-                //        continue;
-                //    }
-
-                //    Gizmos.DrawLine(endEffector.Position, this.Target.EffectivePosition);
-                //}
-
                 if (this.Target.Effector != null)
                 {
                     Gizmos.DrawLine(this.Target.Effector.Position, this.Target.EffectivePosition);
