@@ -21,7 +21,9 @@ namespace ProceduralAnimation
 
             Vector3 averagePosition = _transforms.Select(t => t.position).Mean();
 
-            this.Position = new Vector3(averagePosition.x * _weights.x, averagePosition.y * _weights.y, averagePosition.z * _weights.z) + _offset;
+            this.Position = new Vector3(averagePosition.x * _weights.x, averagePosition.y * _weights.y, averagePosition.z * _weights.z); // + _offset;
+
+            this.LocalPosition = _offset;
         }
     }
 }
