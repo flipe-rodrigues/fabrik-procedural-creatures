@@ -46,7 +46,5 @@ namespace ProceduralAnimation
         {
             _chain = this.Chain;
         }
-
-        public override abstract void UpdateName();
     }
 }

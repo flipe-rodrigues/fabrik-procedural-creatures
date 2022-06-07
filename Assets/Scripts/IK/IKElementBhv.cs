@@ -30,7 +30,7 @@ namespace ProceduralAnimation
             _inverseKinematics = this.IK;
         }
 
-        private void LateUpdate()
+        public virtual void LateUpdate()
         {
             if (!Application.isPlaying)
             {

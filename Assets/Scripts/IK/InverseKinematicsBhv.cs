@@ -11,9 +11,13 @@ namespace ProceduralAnimation
     public class InverseKinematicsBhv : MonoBehaviour
     {
         // Serialized fields
+        public bool debugging = false;
+        [SerializeField] private bool _rootIsFixed = true;
         [SerializeField] private LayerMask _terrainLayerMask = 0;
         [SerializeField] private bool _snapToTerrain = false;
         [SerializeField, Min(0)] private float _terrainOffset = 0;
+        [SerializeField, Range(1, 50)] private int _maxIterations = 15;
+        [SerializeField, Min(1e-4f)] private float _tolerance = 1e-4f;
 
         // Public properties
         public bool SnapToTerrain => _snapToTerrain;
@@ -96,24 +100,29 @@ namespace ProceduralAnimation
             _attractors = this.Attractors;
         }
 
+        private void Start()
+        {
+            StopAllCoroutines();
+
+            if (debugging)
+            {
+                StartCoroutine(this.FRIK_Coroutine());
+            }
+        }
+
         private void LateUpdate()
         {
-            this.FRIK();
+            if (!debugging)
+            {
+                this.FRIK();
+            }
         }
 
         private void FRIK()
         {
             this.SnapshotIK();
 
-            foreach (TargetBhv target in this.Targets.Where(target => target.IsActive).OrderBy(target => target.Priority))
-            {
-                this.ResolveIK(target.Effector, target);
-            }
-
-            foreach (JointBhv joint in this.Joints)
-            {
-                //
-            }
+            this.ResolveIK();
 
             if (_snapToTerrain)
             {
@@ -121,6 +130,26 @@ namespace ProceduralAnimation
             }
 
             this.ApplyIK();
+        }
+
+        private IEnumerator FRIK_Coroutine()
+        {
+            while (true)
+            {
+                this.SnapshotIK();
+
+                //foreach (TargetBhv target in this.Targets.Where(target => target.IsActive).OrderBy(target => target.Priority))
+                //{
+                //    for (int i = 0; i < (target.Priority + 1) * 15; i++)
+                //        this.ResolveIK(target.Effector, target);
+
+                //    this.ApplyIK();
+
+                //    yield return new WaitForSeconds(.5f);
+                //}
+
+                yield return new WaitForSeconds(1f);
+            }
         }
 
         private void SnapshotIK()
@@ -131,18 +160,45 @@ namespace ProceduralAnimation
             }
         }
 
-        private void ResolveIK(JointBhv effector, TargetBhv target)
+        private void ResolveIK()
         {
-            if (effector == null)
+            for (int i = 0; i < _maxIterations; i++)
             {
-                return;
+                foreach (TargetBhv target in this.Targets.Where(target => target.IsActive && target.Effector != null).OrderByDescending(target => target.Effector.Chain.Depth))
+                {
+                    JointBhv effector = target.Effector;
+
+                    effector.TentativePosition = target.EffectivePosition;
+
+                    effector.PropagateUpstream();
+                }
+
+                foreach (JointBhv intersection in this.Joints.Where(joint => joint.Type == JointType.Intersection))
+                {
+                    intersection.TentativePosition = intersection.DownstreamJoints.Select(joint => joint.TentativePosition).Mean();
+
+                    intersection.PropagateUpstream();
+                }
+
+                foreach (ChainBhv chain in this.Chains.OrderBy(chain => chain.Depth))
+                {
+                    JointBhv firstJoint = chain.Joints.First();
+
+                    if (firstJoint.Type == JointType.Root)
+                    {
+                        if (_rootIsFixed)
+                        {
+                            firstJoint.TentativePosition = firstJoint.Position;
+                        }
+                    }
+                    else
+                    {
+                        firstJoint.TentativePosition = firstJoint.UpstreamJoints.First().TentativePosition;
+                    }
+
+                    firstJoint.PropagateDownstream();
+                }
             }
-
-            effector.TentativePosition = target.EffectivePosition;
-
-            effector.PropagateUpstream(effector);
-
-            effector.PropagateDownstream(effector);
         }
 
         private void SnapIKToTerrain()
@@ -172,26 +228,6 @@ namespace ProceduralAnimation
 
                 joint.Position = joint.TentativePosition;
             }
-
-            //for (int i = 0; i < chain.Joints.Length; i++)
-            //{
-            //    Vector3 forward, up;
-
-            //    if (i == chain.Joints.Length - 1)
-            //    {
-            //        forward = chain.Joints[i - 1].Forward;
-            //    }
-            //    else
-            //    {
-            //        forward = (chain.Joints[i + 1].TentativePosition - chain.Joints[i].TentativePosition).normalized;
-            //    }
-
-            //    up = _snapToTerrain ? chain.Joints[i].TentativeUpDirection : Vector3.up;
-
-            //    chain.Joints[i].Rotation = Quaternion.LookRotation(forward, up);
-
-            //    chain.Joints[i].Position = chain.Joints[i].TentativePosition;
-            //}
         }
     }
 }

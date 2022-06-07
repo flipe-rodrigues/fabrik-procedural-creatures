@@ -70,7 +70,7 @@ namespace ProceduralAnimation
 
         public override void UpdateName()
         {
-            this.name = "Link " + "(" + this.Index + "-" + (this.Index + 1) + " - " + this.Chain.name + ")";
+            this.name = "Link " + "(" + this.Chain.name + " - " + this.Index + "-" + (this.Index + 1) + ")";
         }
 
         private void LockTransform()
