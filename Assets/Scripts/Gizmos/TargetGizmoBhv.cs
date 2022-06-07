@@ -62,5 +62,18 @@ namespace ProceduralAnimation
 
             Gizmos.DrawWireMesh(this.Mesh);
         }
+
+        //private void OnDrawGizmosSelected()
+        //{
+        //    Gizmos.matrix = Matrix4x4.TRS(this.Position, this.Rotation, this.Target.DeadZoneRadius * 2 * Vector3.one);
+
+        //    Gizmos.color = this.FaceColor.SetAlpha(this.FaceColor.a * _deadZoneAlphaMultiplier);
+
+        //    Gizmos.DrawMesh(this.Mesh);
+
+        //    Gizmos.color = this.WireColor.SetAlpha(this.WireColor.a * _deadZoneAlphaMultiplier);
+
+        //    Gizmos.DrawWireMesh(this.Mesh);
+        //}
     }
 }

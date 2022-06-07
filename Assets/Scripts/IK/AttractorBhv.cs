@@ -94,6 +94,11 @@ namespace ProceduralAnimation
                 _currentLocalPosition = _target.Parent.InverseTransformPoint(_currentPosition);
             }
 
+            if (Selection.Contains(_target.gameObject))
+            {
+                this.Start();
+            }
+
             _target.LocalPosition = _currentLocalPosition;
 
             _target.Forward = this.Forward;

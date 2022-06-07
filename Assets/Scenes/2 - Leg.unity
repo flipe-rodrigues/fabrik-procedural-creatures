@@ -296,9 +296,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _chain: {fileID: 690797466}
   _index: 2
-  _immediateChildChains: []
-  _immediateChildJoints:
-  - {fileID: 725226210}
+  _upstreamJoints: []
+  _downstreamJoints: []
+  _type: 0
+  _depth: 0
+  _link: {fileID: 0}
 --- !u!1 &8298395
 GameObject:
   m_ObjectHideFlags: 0
@@ -467,7 +469,7 @@ GameObject:
   - component: {fileID: 46621934}
   - component: {fileID: 46621933}
   m_Layer: 0
-  m_Name: Link (3-4 - Left Leg)
+  m_Name: Link (Left Leg - 3-4)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -864,8 +866,6 @@ MonoBehaviour:
     type: 3}
   _linkPrefab: {fileID: 1900774644154046980, guid: 29d3881d91be13b4496c8d5b79aff7b7,
     type: 3}
-  _targetPrefab: {fileID: 8326918916394688075, guid: b4fb8c0563697734bbb86d4fc042d7f5,
-    type: 3}
   _jointCount: 11
   _linkCount: 10
   _linkScaleSamplingCurves:
@@ -1096,7 +1096,7 @@ GameObject:
   m_Component:
   - component: {fileID: 85637168}
   - component: {fileID: 85637167}
-  - component: {fileID: 85637166}
+  - component: {fileID: 85637169}
   m_Layer: 0
   m_Name: Skeleton
   m_TagString: Untagged
@@ -1104,30 +1104,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &85637166
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 85637165}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d230d5f315217b14eb6637402a7464ec, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _terrainLayerMask:
-    serializedVersion: 2
-    m_Bits: 8
-  _snapToTerrain: 0
-  _terrainOffset: 0
-  _chains:
-  - {fileID: 76349570}
-  _targets:
-  - {fileID: 291100900}
-  - {fileID: 1603577083}
-  - {fileID: 261822164}
-  _attractors: []
 --- !u!114 &85637167
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1157,6 +1133,48 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &85637169
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 85637165}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8b77f6c5a55a1834ba091f6a9a75a55b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _rootIsFixed: 0
+  _terrainLayerMask:
+    serializedVersion: 2
+    m_Bits: 8
+  _snapToTerrain: 0
+  _terrainOffset: 0
+  _maxIterations: 15
+  _tolerance: 0.0001
+  _chains:
+  - {fileID: 76349570}
+  _joints:
+  - {fileID: 1979814989}
+  - {fileID: 591363375}
+  - {fileID: 632272279}
+  - {fileID: 1514776461}
+  - {fileID: 1795321070}
+  - {fileID: 1169767798}
+  - {fileID: 1160068745}
+  - {fileID: 1187329209}
+  - {fileID: 1438225120}
+  - {fileID: 791215555}
+  - {fileID: 1540117816}
+  _targets:
+  - {fileID: 291100900}
+  - {fileID: 1603577083}
+  - {fileID: 261822164}
+  _attractors:
+  - {fileID: 1872373294}
+  - {fileID: 1844921501}
+  - {fileID: 1479852323}
 --- !u!1 &119558688
 GameObject:
   m_ObjectHideFlags: 0
@@ -1563,9 +1581,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _chain: {fileID: 977307658}
   _index: 9
-  _immediateChildChains: []
-  _immediateChildJoints:
-  - {fileID: 1084474110}
+  _upstreamJoints: []
+  _downstreamJoints: []
+  _type: 0
+  _depth: 0
+  _link: {fileID: 0}
 --- !u!1 &173982060
 GameObject:
   m_ObjectHideFlags: 0
@@ -1648,8 +1668,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _chain: {fileID: 690797466}
   _index: 10
-  _immediateChildChains: []
-  _immediateChildJoints: []
+  _upstreamJoints: []
+  _downstreamJoints: []
+  _type: 0
+  _depth: 0
+  _link: {fileID: 0}
 --- !u!4 &201967795
 Transform:
   m_ObjectHideFlags: 0
@@ -1885,7 +1908,7 @@ GameObject:
   - component: {fileID: 261822164}
   - component: {fileID: 261822163}
   m_Layer: 0
-  m_Name: Target < Joint (10 - Left Leg)
+  m_Name: Target < Leaf Joint (Left Leg - 10)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1899,7 +1922,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 261822161}
   m_LocalRotation: {x: -0, y: -0.1283327, z: -0, w: 0.99173117}
-  m_LocalPosition: {x: -3.1369019, y: 0.0031619072, z: 0.8751221}
+  m_LocalPosition: {x: -2.094574, y: 0.20874, z: -1.2901917}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1941,7 +1964,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _effector: {fileID: 1540117816}
   _isActive: 1
-  _priority: 10
+  _priority: 1
   _deadZoneRadius: 2
 --- !u!1 &289241355
 GameObject:
@@ -1991,9 +2014,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _chain: {fileID: 977307658}
   _index: 2
-  _immediateChildChains: []
-  _immediateChildJoints:
-  - {fileID: 1510114160}
+  _upstreamJoints: []
+  _downstreamJoints: []
+  _type: 0
+  _depth: 0
+  _link: {fileID: 0}
 --- !u!1 &291100897
 GameObject:
   m_ObjectHideFlags: 0
@@ -2006,7 +2031,7 @@ GameObject:
   - component: {fileID: 291100900}
   - component: {fileID: 291100899}
   m_Layer: 0
-  m_Name: Target < Joint (0 - Left Leg)
+  m_Name: Target < Root Joint (Left Leg - 0)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2020,7 +2045,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 291100897}
   m_LocalRotation: {x: -0, y: -0.1283327, z: -0, w: 0.99173117}
-  m_LocalPosition: {x: -0.89, y: 1.3, z: 3.23}
+  m_LocalPosition: {x: 0.21, y: 2.03, z: -0.6899996}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -2114,9 +2139,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _chain: {fileID: 977307658}
   _index: 0
-  _immediateChildChains: []
-  _immediateChildJoints:
-  - {fileID: 1899521534}
+  _upstreamJoints: []
+  _downstreamJoints: []
+  _type: 0
+  _depth: 0
+  _link: {fileID: 0}
 --- !u!1 &304958772
 GameObject:
   m_ObjectHideFlags: 0
@@ -2389,9 +2416,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _chain: {fileID: 690797466}
   _index: 4
-  _immediateChildChains: []
-  _immediateChildJoints:
-  - {fileID: 553022938}
+  _upstreamJoints: []
+  _downstreamJoints: []
+  _type: 0
+  _depth: 0
+  _link: {fileID: 0}
 --- !u!1 &430891800
 GameObject:
   m_ObjectHideFlags: 0
@@ -2792,9 +2821,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _chain: {fileID: 690797466}
   _index: 5
-  _immediateChildChains: []
-  _immediateChildJoints:
-  - {fileID: 2012509954}
+  _upstreamJoints: []
+  _downstreamJoints: []
+  _type: 0
+  _depth: 0
+  _link: {fileID: 0}
 --- !u!1 &566309604
 GameObject:
   m_ObjectHideFlags: 0
@@ -2888,7 +2919,7 @@ GameObject:
   - component: {fileID: 591363374}
   - component: {fileID: 591363375}
   m_Layer: 0
-  m_Name: Joint (1 - Left Leg)
+  m_Name: Joint (Left Leg - 1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2901,8 +2932,8 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 591363373}
-  m_LocalRotation: {x: 0.0079006255, y: -0.009416997, z: -0.0019217134, w: 0.99992263}
-  m_LocalPosition: {x: 0.000000063329935, y: -0.000000003259629, z: 0.50000006}
+  m_LocalRotation: {x: 0.072374076, y: -0.09569218, z: 0.009999762, w: 0.992726}
+  m_LocalPosition: {x: -0.000000007450581, y: -0.0000000018626451, z: 0.4999998}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -2925,9 +2956,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _chain: {fileID: 76349570}
   _index: 1
-  _immediateChildChains: []
-  _immediateChildJoints:
+  _upstreamJoints:
+  - {fileID: 1979814989}
+  _downstreamJoints:
   - {fileID: 632272279}
+  _type: 1
+  _depth: 1
+  _link: {fileID: 1339888212}
 --- !u!1 &605641565
 GameObject:
   m_ObjectHideFlags: 0
@@ -3143,7 +3178,7 @@ GameObject:
   - component: {fileID: 632272278}
   - component: {fileID: 632272279}
   m_Layer: 0
-  m_Name: Joint (2 - Left Leg)
+  m_Name: Joint (Left Leg - 2)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3156,8 +3191,8 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 632272277}
-  m_LocalRotation: {x: 0.02104526, y: -0.024768507, z: -0.0043116477, w: 0.9994624}
-  m_LocalPosition: {x: 0.000000049360096, y: -9.313226e-10, z: 0.5}
+  m_LocalRotation: {x: 0.114795744, y: -0.14899838, z: 0.04501077, w: 0.9811195}
+  m_LocalPosition: {x: 0.000000014901161, y: -0.000000007450581, z: 0.49999988}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -3180,9 +3215,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _chain: {fileID: 76349570}
   _index: 2
-  _immediateChildChains: []
-  _immediateChildJoints:
+  _upstreamJoints:
+  - {fileID: 591363375}
+  _downstreamJoints:
   - {fileID: 1514776461}
+  _type: 1
+  _depth: 2
+  _link: {fileID: 1601622527}
 --- !u!1 &655697606
 GameObject:
   m_ObjectHideFlags: 0
@@ -3264,9 +3303,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _chain: {fileID: 690797466}
   _index: 0
-  _immediateChildChains: []
-  _immediateChildJoints:
-  - {fileID: 696490219}
+  _upstreamJoints: []
+  _downstreamJoints: []
+  _type: 0
+  _depth: 0
+  _link: {fileID: 0}
 --- !u!1 &669326927
 GameObject:
   m_ObjectHideFlags: 0
@@ -3431,8 +3472,6 @@ MonoBehaviour:
   _jointPrefab: {fileID: 8907394755714711600, guid: df734bbbcb6c218448e4835762ab0bb2,
     type: 3}
   _linkPrefab: {fileID: 1900774644154046980, guid: 29d3881d91be13b4496c8d5b79aff7b7,
-    type: 3}
-  _targetPrefab: {fileID: 8326918916394688075, guid: b4fb8c0563697734bbb86d4fc042d7f5,
     type: 3}
   _jointCount: 11
   _linkCount: 10
@@ -3633,9 +3672,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _chain: {fileID: 690797466}
   _index: 1
-  _immediateChildChains: []
-  _immediateChildJoints:
-  - {fileID: 5547001}
+  _upstreamJoints: []
+  _downstreamJoints: []
+  _type: 0
+  _depth: 0
+  _link: {fileID: 0}
 --- !u!1 &711370228
 GameObject:
   m_ObjectHideFlags: 0
@@ -3930,9 +3971,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _chain: {fileID: 690797466}
   _index: 3
-  _immediateChildChains: []
-  _immediateChildJoints:
-  - {fileID: 419505261}
+  _upstreamJoints: []
+  _downstreamJoints: []
+  _type: 0
+  _depth: 0
+  _link: {fileID: 0}
 --- !u!1 &735100492
 GameObject:
   m_ObjectHideFlags: 0
@@ -4269,7 +4312,7 @@ GameObject:
   - component: {fileID: 791215554}
   - component: {fileID: 791215555}
   m_Layer: 0
-  m_Name: Joint (9 - Left Leg)
+  m_Name: Joint (Left Leg - 9)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -4282,8 +4325,8 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 791215553}
-  m_LocalRotation: {x: -0.0013476809, y: -0.0077169267, z: 0.006558658, w: 0.99994785}
-  m_LocalPosition: {x: -0.00000033527613, y: 0.00000020954758, z: 0.49999982}
+  m_LocalRotation: {x: -0.015283372, y: -0.027771886, z: 0.007048619, w: 0.99947256}
+  m_LocalPosition: {x: -0.000000011175871, y: 0.00000014156103, z: 0.49999955}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -4306,9 +4349,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _chain: {fileID: 76349570}
   _index: 9
-  _immediateChildChains: []
-  _immediateChildJoints:
+  _upstreamJoints:
+  - {fileID: 1438225120}
+  _downstreamJoints:
   - {fileID: 1540117816}
+  _type: 1
+  _depth: 9
+  _link: {fileID: 1076300289}
 --- !u!1 &795307937
 GameObject:
   m_ObjectHideFlags: 0
@@ -4408,9 +4455,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _chain: {fileID: 977307658}
   _index: 7
-  _immediateChildChains: []
-  _immediateChildJoints:
-  - {fileID: 928143959}
+  _upstreamJoints: []
+  _downstreamJoints: []
+  _type: 0
+  _depth: 0
+  _link: {fileID: 0}
 --- !u!1 &807996260
 GameObject:
   m_ObjectHideFlags: 0
@@ -4661,7 +4710,7 @@ GameObject:
   - component: {fileID: 861496338}
   - component: {fileID: 861496337}
   m_Layer: 0
-  m_Name: Link (4-5 - Left Leg)
+  m_Name: Link (Left Leg - 4-5)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -5085,9 +5134,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _chain: {fileID: 977307658}
   _index: 8
-  _immediateChildChains: []
-  _immediateChildJoints:
-  - {fileID: 152384663}
+  _upstreamJoints: []
+  _downstreamJoints: []
+  _type: 0
+  _depth: 0
+  _link: {fileID: 0}
 --- !u!1 &949173251
 GameObject:
   m_ObjectHideFlags: 0
@@ -5227,7 +5278,7 @@ GameObject:
   - component: {fileID: 956580482}
   - component: {fileID: 956580481}
   m_Layer: 0
-  m_Name: Link (8-9 - Left Leg)
+  m_Name: Link (Left Leg - 8-9)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -5433,9 +5484,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _chain: {fileID: 690797466}
   _index: 7
-  _immediateChildChains: []
-  _immediateChildJoints:
-  - {fileID: 1005522880}
+  _upstreamJoints: []
+  _downstreamJoints: []
+  _type: 0
+  _depth: 0
+  _link: {fileID: 0}
 --- !u!1 &974706107
 GameObject:
   m_ObjectHideFlags: 0
@@ -5450,7 +5503,7 @@ GameObject:
   - component: {fileID: 974706110}
   - component: {fileID: 974706109}
   m_Layer: 0
-  m_Name: Link (0-1 - Left Leg)
+  m_Name: Link (Left Leg - 0-1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -5606,8 +5659,6 @@ MonoBehaviour:
   _jointPrefab: {fileID: 8907394755714711600, guid: df734bbbcb6c218448e4835762ab0bb2,
     type: 3}
   _linkPrefab: {fileID: 1900774644154046980, guid: 29d3881d91be13b4496c8d5b79aff7b7,
-    type: 3}
-  _targetPrefab: {fileID: 8326918916394688075, guid: b4fb8c0563697734bbb86d4fc042d7f5,
     type: 3}
   _jointCount: 11
   _linkCount: 10
@@ -5808,9 +5859,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _chain: {fileID: 690797466}
   _index: 8
-  _immediateChildChains: []
-  _immediateChildJoints:
-  - {fileID: 2007597881}
+  _upstreamJoints: []
+  _downstreamJoints: []
+  _type: 0
+  _depth: 0
+  _link: {fileID: 0}
 --- !u!1 &1013932810
 GameObject:
   m_ObjectHideFlags: 0
@@ -5946,7 +5999,7 @@ GameObject:
   - component: {fileID: 1035485395}
   - component: {fileID: 1035485394}
   m_Layer: 0
-  m_Name: Link (6-7 - Left Leg)
+  m_Name: Link (Left Leg - 6-7)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -6188,7 +6241,7 @@ GameObject:
   - component: {fileID: 1076300289}
   - component: {fileID: 1076300288}
   m_Layer: 0
-  m_Name: Link (9-10 - Left Leg)
+  m_Name: Link (Left Leg - 9-10)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -6326,8 +6379,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _chain: {fileID: 977307658}
   _index: 10
-  _immediateChildChains: []
-  _immediateChildJoints: []
+  _upstreamJoints: []
+  _downstreamJoints: []
+  _type: 0
+  _depth: 0
+  _link: {fileID: 0}
 --- !u!4 &1084474111
 Transform:
   m_ObjectHideFlags: 0
@@ -6392,9 +6448,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _chain: {fileID: 977307658}
   _index: 4
-  _immediateChildChains: []
-  _immediateChildJoints:
-  - {fileID: 1519624548}
+  _upstreamJoints: []
+  _downstreamJoints: []
+  _type: 0
+  _depth: 0
+  _link: {fileID: 0}
 --- !u!1 &1157775785
 GameObject:
   m_ObjectHideFlags: 0
@@ -6457,7 +6515,7 @@ GameObject:
   - component: {fileID: 1160068744}
   - component: {fileID: 1160068745}
   m_Layer: 0
-  m_Name: Joint (6 - Left Leg)
+  m_Name: Joint (Left Leg - 6)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -6470,8 +6528,8 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1160068743}
-  m_LocalRotation: {x: 0.07749294, y: -0.21544388, z: 0.15418783, w: 0.96114767}
-  m_LocalPosition: {x: -0.00000011920929, y: -0.00000008195639, z: 0.49999994}
+  m_LocalRotation: {x: -0.07079364, y: -0.14044385, z: 0.08050311, w: 0.9842678}
+  m_LocalPosition: {x: 0.00000008940697, y: -0.000000059604645, z: 0.5000002}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -6494,9 +6552,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _chain: {fileID: 76349570}
   _index: 6
-  _immediateChildChains: []
-  _immediateChildJoints:
+  _upstreamJoints:
+  - {fileID: 1169767798}
+  _downstreamJoints:
   - {fileID: 1187329209}
+  _type: 1
+  _depth: 6
+  _link: {fileID: 1035485395}
 --- !u!1 &1169767796
 GameObject:
   m_ObjectHideFlags: 0
@@ -6508,7 +6570,7 @@ GameObject:
   - component: {fileID: 1169767797}
   - component: {fileID: 1169767798}
   m_Layer: 0
-  m_Name: Joint (5 - Left Leg)
+  m_Name: Joint (Left Leg - 5)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -6521,8 +6583,8 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1169767796}
-  m_LocalRotation: {x: 0.15848093, y: -0.23170592, z: 0.091563664, w: 0.95541215}
-  m_LocalPosition: {x: 0.000000029802322, y: 0.00000015646219, z: 0.5000002}
+  m_LocalRotation: {x: 0.047527336, y: 0.19394216, z: -0.14478746, w: -0.9691048}
+  m_LocalPosition: {x: -0.000000029802322, y: 0.000000074505806, z: 0.49999994}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -6545,9 +6607,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _chain: {fileID: 76349570}
   _index: 5
-  _immediateChildChains: []
-  _immediateChildJoints:
+  _upstreamJoints:
+  - {fileID: 1795321070}
+  _downstreamJoints:
   - {fileID: 1160068745}
+  _type: 1
+  _depth: 5
+  _link: {fileID: 1390128478}
 --- !u!1 &1187329207
 GameObject:
   m_ObjectHideFlags: 0
@@ -6559,7 +6625,7 @@ GameObject:
   - component: {fileID: 1187329208}
   - component: {fileID: 1187329209}
   m_Layer: 0
-  m_Name: Joint (7 - Left Leg)
+  m_Name: Joint (Left Leg - 7)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -6572,8 +6638,8 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1187329207}
-  m_LocalRotation: {x: 0.007832883, y: -0.15596166, z: 0.13395165, w: 0.97860694}
-  m_LocalPosition: {x: 0.00000011920929, y: -0.000000044703484, z: 0.49999997}
+  m_LocalRotation: {x: -0.05729889, y: -0.09451617, z: 0.038967427, w: 0.9931088}
+  m_LocalPosition: {x: -0.00000011920929, y: 0.000000074505806, z: 0.5000002}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -6596,9 +6662,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _chain: {fileID: 76349570}
   _index: 7
-  _immediateChildChains: []
-  _immediateChildJoints:
+  _upstreamJoints:
+  - {fileID: 1160068745}
+  _downstreamJoints:
   - {fileID: 1438225120}
+  _type: 1
+  _depth: 7
+  _link: {fileID: 1251734032}
 --- !u!1 &1206799292
 GameObject:
   m_ObjectHideFlags: 0
@@ -6701,7 +6771,7 @@ GameObject:
   - component: {fileID: 1251734032}
   - component: {fileID: 1251734031}
   m_Layer: 0
-  m_Name: Link (7-8 - Left Leg)
+  m_Name: Link (Left Leg - 7-8)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -6976,7 +7046,7 @@ GameObject:
   - component: {fileID: 1339888212}
   - component: {fileID: 1339888211}
   m_Layer: 0
-  m_Name: Link (1-2 - Left Leg)
+  m_Name: Link (Left Leg - 1-2)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -7251,7 +7321,7 @@ GameObject:
   - component: {fileID: 1390128478}
   - component: {fileID: 1390128477}
   m_Layer: 0
-  m_Name: Link (5-6 - Left Leg)
+  m_Name: Link (Left Leg - 5-6)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -7503,7 +7573,7 @@ GameObject:
   - component: {fileID: 1438225119}
   - component: {fileID: 1438225120}
   m_Layer: 0
-  m_Name: Joint (8 - Left Leg)
+  m_Name: Joint (Left Leg - 8)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -7516,8 +7586,8 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1438225118}
-  m_LocalRotation: {x: -0.005906136, y: -0.04659128, z: 0.04018543, w: 0.99808794}
-  m_LocalPosition: {x: 0.000000461936, y: 0.00000008288771, z: 0.49999988}
+  m_LocalRotation: {x: -0.03471349, y: -0.058182765, z: 0.017910974, w: 0.9975415}
+  m_LocalPosition: {x: -0.000000052154064, y: -0.000000078231096, z: 0.49999985}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -7540,9 +7610,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _chain: {fileID: 76349570}
   _index: 8
-  _immediateChildChains: []
-  _immediateChildJoints:
+  _upstreamJoints:
+  - {fileID: 1187329209}
+  _downstreamJoints:
   - {fileID: 791215555}
+  _type: 1
+  _depth: 8
+  _link: {fileID: 956580482}
 --- !u!1 &1443065810
 GameObject:
   m_ObjectHideFlags: 0
@@ -7606,7 +7680,7 @@ GameObject:
   - component: {fileID: 1479852323}
   - component: {fileID: 1479852322}
   m_Layer: 0
-  m_Name: Attractor < Target < Joint (10 - Left Leg)
+  m_Name: Attractor < Target < Leaf Joint (Left Leg - 10)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -7800,9 +7874,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _chain: {fileID: 977307658}
   _index: 3
-  _immediateChildChains: []
-  _immediateChildJoints:
-  - {fileID: 1146290940}
+  _upstreamJoints: []
+  _downstreamJoints: []
+  _type: 0
+  _depth: 0
+  _link: {fileID: 0}
 --- !u!1 &1514776459
 GameObject:
   m_ObjectHideFlags: 0
@@ -7814,7 +7890,7 @@ GameObject:
   - component: {fileID: 1514776460}
   - component: {fileID: 1514776461}
   m_Layer: 0
-  m_Name: Joint (3 - Left Leg)
+  m_Name: Joint (Left Leg - 3)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -7827,8 +7903,8 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1514776459}
-  m_LocalRotation: {x: 0.055131223, y: -0.06352828, z: -0.006119093, w: 0.99643725}
-  m_LocalPosition: {x: -0.000000057742, y: 0.000000009313226, z: 0.4999999}
+  m_LocalRotation: {x: 0.10660898, y: -0.20086, z: 0.114911824, w: 0.966998}
+  m_LocalPosition: {x: 0.000000059604645, y: 0.000000037252903, z: 0.5}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -7851,9 +7927,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _chain: {fileID: 76349570}
   _index: 3
-  _immediateChildChains: []
-  _immediateChildJoints:
+  _upstreamJoints:
+  - {fileID: 632272279}
+  _downstreamJoints:
   - {fileID: 1795321070}
+  _type: 1
+  _depth: 3
+  _link: {fileID: 46621934}
 --- !u!1 &1516349606
 GameObject:
   m_ObjectHideFlags: 0
@@ -7935,9 +8015,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _chain: {fileID: 977307658}
   _index: 5
-  _immediateChildChains: []
-  _immediateChildJoints:
-  - {fileID: 1577546059}
+  _upstreamJoints: []
+  _downstreamJoints: []
+  _type: 0
+  _depth: 0
+  _link: {fileID: 0}
 --- !u!1 &1528873294
 GameObject:
   m_ObjectHideFlags: 0
@@ -8195,7 +8277,7 @@ GameObject:
   - component: {fileID: 1540117817}
   - component: {fileID: 1540117816}
   m_Layer: 0
-  m_Name: Joint (10 - Left Leg)
+  m_Name: Leaf Joint (Left Leg - 10)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -8215,8 +8297,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _chain: {fileID: 76349570}
   _index: 10
-  _immediateChildChains: []
-  _immediateChildJoints: []
+  _upstreamJoints:
+  - {fileID: 791215555}
+  _downstreamJoints: []
+  _type: 4
+  _depth: 10
+  _link: {fileID: 0}
 --- !u!4 &1540117817
 Transform:
   m_ObjectHideFlags: 0
@@ -8224,9 +8310,8 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1540117815}
-  m_LocalRotation: {x: -0.0000000023283062, y: 0.00000008149072, z: -0.000000069149785,
-    w: 1}
-  m_LocalPosition: {x: -0.000000059604645, y: 0.000000054598786, z: 0.5000001}
+  m_LocalRotation: {x: -0.00002251551, y: -0.9846001, z: 0.17482118, w: 0.00039092827}
+  m_LocalPosition: {x: -0.0000001322478, y: -0.0000002514571, z: 0.50000024}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -8281,9 +8366,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _chain: {fileID: 977307658}
   _index: 6
-  _immediateChildChains: []
-  _immediateChildJoints:
-  - {fileID: 803315933}
+  _upstreamJoints: []
+  _downstreamJoints: []
+  _type: 0
+  _depth: 0
+  _link: {fileID: 0}
 --- !u!1 &1585392774
 GameObject:
   m_ObjectHideFlags: 0
@@ -8349,7 +8436,7 @@ GameObject:
   - component: {fileID: 1601622527}
   - component: {fileID: 1601622526}
   m_Layer: 0
-  m_Name: Link (2-3 - Left Leg)
+  m_Name: Link (Left Leg - 2-3)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -8468,7 +8555,7 @@ GameObject:
   - component: {fileID: 1603577083}
   - component: {fileID: 1603577082}
   m_Layer: 0
-  m_Name: Target < Joint (5 - Left Leg)
+  m_Name: Target < Joint (Left Leg - 5)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -8482,7 +8569,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1603577080}
   m_LocalRotation: {x: -0, y: -0.1283327, z: -0, w: 0.99173117}
-  m_LocalPosition: {x: -4.870265, y: 2.3, z: 3.0302725}
+  m_LocalPosition: {x: -3.770265, y: 3.0300002, z: -0.8897276}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -8523,7 +8610,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _effector: {fileID: 1169767798}
-  _isActive: 1
+  _isActive: 0
   _priority: 0
   _deadZoneRadius: 0
 --- !u!1 &1648250515
@@ -9348,7 +9435,7 @@ GameObject:
   - component: {fileID: 1795321069}
   - component: {fileID: 1795321070}
   m_Layer: 0
-  m_Name: Joint (4 - Left Leg)
+  m_Name: Joint (Left Leg - 4)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -9361,8 +9448,8 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1795321068}
-  m_LocalRotation: {x: -0.12466642, y: 0.14557993, z: -0.012492478, w: -0.98138106}
-  m_LocalPosition: {x: 0.000000074505806, y: -0.000000063329935, z: 0.49999985}
+  m_LocalRotation: {x: 0.029155836, y: -0.2248793, z: 0.17448449, w: 0.9581933}
+  m_LocalPosition: {x: 0.00000020861626, y: -0.000000007450581, z: 0.5}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -9385,9 +9472,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _chain: {fileID: 76349570}
   _index: 4
-  _immediateChildChains: []
-  _immediateChildJoints:
+  _upstreamJoints:
+  - {fileID: 1514776461}
+  _downstreamJoints:
   - {fileID: 1169767798}
+  _type: 1
+  _depth: 4
+  _link: {fileID: 861496338}
 --- !u!1 &1844921498
 GameObject:
   m_ObjectHideFlags: 0
@@ -9400,7 +9491,7 @@ GameObject:
   - component: {fileID: 1844921501}
   - component: {fileID: 1844921500}
   m_Layer: 0
-  m_Name: Attractor < Target < Joint (5 - Left Leg)
+  m_Name: Attractor < Target < Joint (Left Leg - 5)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -9646,7 +9737,7 @@ GameObject:
   - component: {fileID: 1872373294}
   - component: {fileID: 1872373293}
   m_Layer: 0
-  m_Name: Attractor < Target < Joint (0 - Left Leg)
+  m_Name: Attractor < Target < Root Joint (Left Leg - 0)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -9660,7 +9751,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1872373291}
   m_LocalRotation: {x: -0, y: -0.1283327, z: -0, w: 0.9917312}
-  m_LocalPosition: {x: -0.89, y: 1.3, z: 3.23}
+  m_LocalPosition: {x: 0.21, y: 2.03, z: -0.69}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -9807,9 +9898,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _chain: {fileID: 977307658}
   _index: 1
-  _immediateChildChains: []
-  _immediateChildJoints:
-  - {fileID: 289241357}
+  _upstreamJoints: []
+  _downstreamJoints: []
+  _type: 0
+  _depth: 0
+  _link: {fileID: 0}
 --- !u!1 &1979814987
 GameObject:
   m_ObjectHideFlags: 0
@@ -9821,7 +9914,7 @@ GameObject:
   - component: {fileID: 1979814988}
   - component: {fileID: 1979814989}
   m_Layer: 0
-  m_Name: Joint (0 - Left Leg)
+  m_Name: Root Joint (Left Leg - 0)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -9834,8 +9927,8 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1979814987}
-  m_LocalRotation: {x: -0.070218325, y: -0.73604244, z: -0.07727421, w: 0.66883457}
-  m_LocalPosition: {x: -1.2144034, y: 1.3491907, z: 3.1988907}
+  m_LocalRotation: {x: 0.015605986, y: -0.0918353, z: 0.0014394409, w: 0.9956509}
+  m_LocalPosition: {x: 0.21, y: 2.01, z: -0.6899996}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -9858,9 +9951,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _chain: {fileID: 76349570}
   _index: 0
-  _immediateChildChains: []
-  _immediateChildJoints:
+  _upstreamJoints: []
+  _downstreamJoints:
   - {fileID: 591363375}
+  _type: 0
+  _depth: 0
+  _link: {fileID: 974706110}
 --- !u!1 &2007597879
 GameObject:
   m_ObjectHideFlags: 0
@@ -9909,9 +10005,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _chain: {fileID: 690797466}
   _index: 9
-  _immediateChildChains: []
-  _immediateChildJoints:
-  - {fileID: 201967794}
+  _upstreamJoints: []
+  _downstreamJoints: []
+  _type: 0
+  _depth: 0
+  _link: {fileID: 0}
 --- !u!1 &2012509952
 GameObject:
   m_ObjectHideFlags: 0
@@ -9960,9 +10058,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _chain: {fileID: 690797466}
   _index: 6
-  _immediateChildChains: []
-  _immediateChildJoints:
-  - {fileID: 961022526}
+  _upstreamJoints: []
+  _downstreamJoints: []
+  _type: 0
+  _depth: 0
+  _link: {fileID: 0}
 --- !u!1 &2030072629
 GameObject:
   m_ObjectHideFlags: 0

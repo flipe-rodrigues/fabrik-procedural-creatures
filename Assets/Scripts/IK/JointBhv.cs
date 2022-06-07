@@ -53,6 +53,12 @@ namespace ProceduralAnimation
         public Vector3 TentativeUpDirection { get => _tentativeUpDirection; set => _tentativeUpDirection = value; }
         public JointType Type => _type;
         public int Depth => _depth;
+        public bool IsRoot => this.UpstreamJoints.Length == 0;
+        public bool IsIntersection => this.DownstreamJoints.Any(joint => joint.Chain != this.Chain);
+        public bool IsBranch => this.UpstreamJoints.Any(joint => joint.Chain != this.Chain);
+        public bool IsLeaf => this.DownstreamJoints.Length == 0;
+
+        // Private properties
         private bool HasLink => this.Link != null;
 
         // Private fields
@@ -88,7 +94,17 @@ namespace ProceduralAnimation
 
         public override void UpdateName()
         {
-            this.name = this.Type.ToString() + " Joint " + "(" + this.Chain.name + " - " + this.Index + ")";
+            string prefix = "";
+
+            prefix += this.IsRoot ? "Root " : "";
+
+            prefix += this.IsIntersection ? "Intersection " : "";
+
+            prefix += this.IsBranch ? "Branch " : "";
+
+            prefix += this.IsLeaf ? "Leaf " : "";
+
+            this.name = prefix + "Joint " + "(" + this.Chain.name + " - " + this.Index + ")";
         }
 
         private void UpdateType()
@@ -122,14 +138,21 @@ namespace ProceduralAnimation
         {
             foreach (JointBhv upstreamJoint in this.UpstreamJoints)
             {
-                if (!upstreamJoint.HasLink || upstreamJoint.Chain != this.Chain)
+                if (!upstreamJoint.HasLink) // || upstreamJoint.Chain != this.Chain)
                 {
                     continue;
                 }
 
-                Vector3 direction = (upstreamJoint.TentativePosition - this.TentativePosition).normalized;
+                if (upstreamJoint.IsIntersection)
+                {
+                    upstreamJoint.TentativePosition = upstreamJoint.DownstreamJoints.Select(joint => joint.TentativePosition).Mean();
+                }
+                else
+                {
+                    Vector3 direction = (upstreamJoint.TentativePosition - this.TentativePosition).normalized;
 
-                upstreamJoint.TentativePosition = this.TentativePosition + upstreamJoint.Link.Length * direction;
+                    upstreamJoint.TentativePosition = this.TentativePosition + upstreamJoint.Link.Length * direction;
+                }
 
                 upstreamJoint.PropagateUpstream();
             }
@@ -139,61 +162,24 @@ namespace ProceduralAnimation
         {
             foreach (JointBhv downstreamJoint in this.DownstreamJoints)
             {
-                if (!this.HasLink || downstreamJoint.Chain != this.Chain)
+                if (!this.HasLink) // || downstreamJoint.Chain != this.Chain)
                 {
                     continue;
                 }
 
-                Vector3 direction = (downstreamJoint.TentativePosition - this.TentativePosition).normalized;
+                if (downstreamJoint.IsBranch)
+                {
+                    downstreamJoint.TentativePosition = downstreamJoint.UpstreamJoints.First().TentativePosition;
+                }
+                else
+                {
+                    Vector3 direction = (downstreamJoint.TentativePosition - this.TentativePosition).normalized;
 
-                downstreamJoint.TentativePosition = this.TentativePosition + this.Link.Length * direction;
+                    downstreamJoint.TentativePosition = this.TentativePosition + this.Link.Length * direction;
+                }
 
                 downstreamJoint.PropagateDownstream();
             }
         }
-
-        //public void PropagateUpstream(JointBhv source)
-        //{
-        //    foreach (JointBhv upstreamJoint in this.UpstreamJoints)
-        //    {
-        //        if (!upstreamJoint.HasLink)
-        //        {
-        //            continue;
-        //        }
-
-        //        Vector3 direction = (upstreamJoint.TentativePosition - this.TentativePosition).normalized;
-
-        //        upstreamJoint.TentativePosition = this.TentativePosition + upstreamJoint.Link.Length * direction;
-
-        //        upstreamJoint.PropagateUpstream(this);
-
-        //        foreach (JointBhv downstreamJoint in this.DownstreamJoints)
-        //        {
-        //            if (downstreamJoint != source)
-        //            {
-        //                downstreamJoint.TentativePosition = source.TentativePosition;
-
-        //                downstreamJoint.PropagateDownstream();
-        //            }
-        //        }
-        //    }
-        //}
-
-        //public void PropagateDownstream()
-        //{
-        //    foreach (JointBhv downstreamJoint in this.DownstreamJoints)
-        //    {
-        //        if (!this.HasLink)
-        //        {
-        //            continue;
-        //        }
-
-        //        Vector3 direction = (downstreamJoint.TentativePosition - this.TentativePosition).normalized;
-
-        //        downstreamJoint.TentativePosition = this.TentativePosition + this.Link.Length * direction;
-
-        //        downstreamJoint.PropagateDownstream();
-        //    }
-        //}
     }
 }

@@ -11,39 +11,40 @@ namespace ProceduralAnimation
     {
         public override void OnInspectorGUI()
         {
-            ChainGenerator chainGenerator = target as ChainGenerator;
-
             base.OnInspectorGUI();
 
-            GUILayout.BeginHorizontal();
-
-            if (GUILayout.Button("Sample Link Scales"))
+            foreach (ChainGenerator chainGenerator in targets as ChainGenerator[])
             {
-                chainGenerator.SampleLinkScales();
+                GUILayout.BeginHorizontal();
+
+                if (GUILayout.Button("Sample Link Scales"))
+                {
+                    chainGenerator.SampleLinkScales();
+                }
+
+                GUI.enabled = !chainGenerator.HasChain && chainGenerator.HasInitializedScales;
+
+                if (GUILayout.Button("Generate"))
+                {
+                    chainGenerator.InstantiateChain();
+                }
+
+                GUI.enabled = chainGenerator.HasChain;
+
+                if (GUILayout.Button("Randomize Pose"))
+                {
+                    chainGenerator.RandomizePose();
+                }
+
+                GUI.enabled = chainGenerator.HasChain;
+
+                if (GUILayout.Button("Reset"))
+                {
+                    chainGenerator.Reset();
+                }
+
+                GUILayout.EndHorizontal();
             }
-
-            GUI.enabled = !chainGenerator.HasChain && chainGenerator.HasInitializedScales;
-
-            if (GUILayout.Button("Generate"))
-            {
-                chainGenerator.InstantiateChain();
-            }
-
-            GUI.enabled = chainGenerator.HasChain;
-
-            if (GUILayout.Button("Randomize Pose"))
-            {
-                chainGenerator.RandomizePose();
-            }
-
-            GUI.enabled = chainGenerator.HasChain;
-
-            if (GUILayout.Button("Reset"))
-            {
-                chainGenerator.Reset();
-            }
-
-            GUILayout.EndHorizontal();
         }
     }
 }

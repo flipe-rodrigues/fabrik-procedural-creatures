@@ -11,7 +11,6 @@ namespace ProceduralAnimation
     public class InverseKinematicsBhv : MonoBehaviour
     {
         // Serialized fields
-        public bool debugging = false;
         [SerializeField] private bool _rootIsFixed = true;
         [SerializeField] private LayerMask _terrainLayerMask = 0;
         [SerializeField] private bool _snapToTerrain = false;
@@ -82,12 +81,29 @@ namespace ProceduralAnimation
                 _attractors = value;
             }
         }
+        public HintBhv[] Hints
+        {
+            get
+            {
+                if (!Application.isPlaying || _hints == null || _hints.Length == 0)
+                {
+                    _hints = this.GetComponentsInChildren<HintBhv>();
+                }
+
+                return _hints;
+            }
+            set
+            {
+                _hints = value;
+            }
+        }
 
         // Private fields
         [SerializeField, ReadOnly] private ChainBhv[] _chains;
         [SerializeField, ReadOnly] private JointBhv[] _joints;
         [SerializeField, ReadOnly] private TargetBhv[] _targets;
         [SerializeField, ReadOnly] private AttractorBhv[] _attractors;
+        [SerializeField, ReadOnly] private HintBhv[] _hints;
 
         private void Awake()
         {
@@ -98,24 +114,13 @@ namespace ProceduralAnimation
             _targets = this.Targets;
 
             _attractors = this.Attractors;
-        }
 
-        private void Start()
-        {
-            StopAllCoroutines();
-
-            if (debugging)
-            {
-                StartCoroutine(this.FRIK_Coroutine());
-            }
+            _hints = this.Hints;
         }
 
         private void LateUpdate()
         {
-            if (!debugging)
-            {
-                this.FRIK();
-            }
+            this.FRIK();
         }
 
         private void FRIK()
@@ -124,32 +129,14 @@ namespace ProceduralAnimation
 
             this.ResolveIK();
 
+            this.BendIK();
+
             if (_snapToTerrain)
             {
                 this.SnapIKToTerrain();
             }
 
             this.ApplyIK();
-        }
-
-        private IEnumerator FRIK_Coroutine()
-        {
-            while (true)
-            {
-                this.SnapshotIK();
-
-                //foreach (TargetBhv target in this.Targets.Where(target => target.IsActive).OrderBy(target => target.Priority))
-                //{
-                //    for (int i = 0; i < (target.Priority + 1) * 15; i++)
-                //        this.ResolveIK(target.Effector, target);
-
-                //    this.ApplyIK();
-
-                //    yield return new WaitForSeconds(.5f);
-                //}
-
-                yield return new WaitForSeconds(1f);
-            }
         }
 
         private void SnapshotIK()
@@ -164,7 +151,8 @@ namespace ProceduralAnimation
         {
             for (int i = 0; i < _maxIterations; i++)
             {
-                foreach (TargetBhv target in this.Targets.Where(target => target.IsActive && target.Effector != null).OrderByDescending(target => target.Effector.Chain.Depth))
+                //foreach (TargetBhv target in this.Targets.Where(target => target.IsActive && target.Effector != null).OrderByDescending(target => target.Effector.Chain.Depth))
+                foreach (TargetBhv target in this.Targets.Where(target => target.IsActive && target.Effector != null).OrderBy(target => target.Priority))
                 {
                     JointBhv effector = target.Effector;
 
@@ -173,33 +161,38 @@ namespace ProceduralAnimation
                     effector.PropagateUpstream();
                 }
 
-                foreach (JointBhv intersection in this.Joints.Where(joint => joint.Type == JointType.Intersection))
-                {
-                    intersection.TentativePosition = intersection.DownstreamJoints.Select(joint => joint.TentativePosition).Mean();
+                JointBhv root = this.Joints.Where(joint => joint.IsRoot).First();
 
-                    intersection.PropagateUpstream();
+                if (_rootIsFixed)
+                {
+                    root.TentativePosition = root.Position;
                 }
 
-                foreach (ChainBhv chain in this.Chains.OrderBy(chain => chain.Depth))
+                root.PropagateDownstream();
+            }
+        }
+
+        private void BendIK()
+        {
+            foreach (HintBhv hint in this.Hints.Where(hint => hint.IsActive && hint.Chain != null))
+            {
+                for (int i = 1; i < hint.Chain.Joints.Length - 1; i++)
                 {
-                    JointBhv firstJoint = chain.Joints.First();
+                    Vector3 planeNormal = (hint.Chain.Joints[i + 1].TentativePosition - hint.Chain.Joints[i - 1].TentativePosition).normalized;
 
-                    if (firstJoint.Type == JointType.Root)
-                    {
-                        if (_rootIsFixed)
-                        {
-                            firstJoint.TentativePosition = firstJoint.Position;
-                        }
-                    }
-                    else
-                    {
-                        firstJoint.TentativePosition = firstJoint.UpstreamJoints.First().TentativePosition;
-                    }
+                    Plane plane = new Plane(planeNormal, hint.Chain.Joints[i - 1].TentativePosition);
 
-                    firstJoint.PropagateDownstream();
+                    Vector3 hintProjection = plane.ClosestPointOnPlane(hint.EffectivePosition);
+
+                    Vector3 jointProjection = plane.ClosestPointOnPlane(hint.Chain.Joints[i].TentativePosition);
+
+                    float angle = Vector3.SignedAngle(jointProjection - hint.Chain.Joints[i - 1].TentativePosition, hintProjection - hint.Chain.Joints[i - 1].TentativePosition, planeNormal);
+
+                    hint.Chain.Joints[i].TentativePosition = Quaternion.AngleAxis(angle, planeNormal) * (hint.Chain.Joints[i].TentativePosition - hint.Chain.Joints[i - 1].TentativePosition) + hint.Chain.Joints[i - 1].TentativePosition;
                 }
             }
         }
+
 
         private void SnapIKToTerrain()
         {

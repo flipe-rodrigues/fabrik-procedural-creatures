@@ -10,7 +10,6 @@ namespace ProceduralAnimation
         // Serialized fields
         [SerializeField] private JointBhv _jointPrefab;
         [SerializeField] private LinkBhv _linkPrefab;
-        [SerializeField] private TargetBhv _targetPrefab;
         [SerializeField, ReadOnly, Min(2)] private int _jointCount;
         [SerializeField, Min(1)] private int _linkCount = 2;
         [SerializeField] private ScaleCurves _linkScaleSamplingCurves;
@@ -51,36 +50,6 @@ namespace ProceduralAnimation
         {
             if (this.HasChain)
             {
-                //foreach (JointBhv joint in this.Chain.Joints)
-                //{
-                //    if (joint != null)
-                //    {
-                //        DestroyImmediate(joint.gameObject);
-                //    }
-                //}
-
-                //this.Chain.Joints = null;
-
-                //foreach (LinkBhv link in this.Chain.Links)
-                //{
-                //    if (link != null)
-                //    {
-                //        DestroyImmediate(link.gameObject);
-                //    }
-                //}
-
-                //this.Chain.Links = null;
-
-                //foreach (TargetBhv target in this.Chain.Targets)
-                //{
-                //    if (target != null)
-                //    {
-                //        DestroyImmediate(target.gameObject);
-                //    }
-                //}
-
-                //this.Chain.Targets = null;
-
                 while (this.Chain.transform.childCount > 0)
                 {
                     DestroyImmediate(this.Chain.transform.GetChild(0).gameObject);
@@ -146,13 +115,6 @@ namespace ProceduralAnimation
             this.InstantiateJoints();
 
             this.InstantiateLinks();
-
-            //if (_targetPrefab != null)
-            //{
-            //    this.InstantiateTargets();
-            //}
-
-            //this.gameObject.AddComponent<InverseKinematicsBhv>();
         }
 
         private void InstantiateJoints()
@@ -188,26 +150,6 @@ namespace ProceduralAnimation
 
             this.Chain.Links = links;
         }
-
-        //private void InstantiateTargets()
-        //{
-        //    Transform targetsParent = new GameObject("Targets").transform;
-
-        //    targetsParent.parent = this.Chain.transform;
-
-        //    targetsParent.localPosition = Vector3.zero;
-
-        //    TargetBhv[] targets = new TargetBhv[_jointCount];
-
-        //    for (int i = 0; i < _jointCount; i++)
-        //    {
-        //        targets[i] = Instantiate(_targetPrefab, this.Chain.Joints[i].Position, Quaternion.identity, targetsParent);
-
-        //        targets[i].PseudoConstructor(this.Chain, i, this.Chain.Joints[i]);
-        //    }
-
-        //    this.Chain.Targets = targets;
-        //} 
 
         public void RandomizePose()
         {
