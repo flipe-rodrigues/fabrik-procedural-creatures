@@ -10,6 +10,9 @@ namespace ProceduralAnimation
         [SerializeField] private float _maxSpeed = 1;
         [SerializeField] private float _steerStrength = 1;
         [SerializeField] private float _wanderStrength = 1;
+        [SerializeField] private Vector3 _velocityWeights = Vector3.one;
+        [SerializeField] private Vector3 _positionMinConstraints = Vector3.negativeInfinity;
+        [SerializeField] private Vector3 _positionMaxConstraints = Vector3.positiveInfinity;
 
         // Private fields
         private Vector3 _velocity;
@@ -27,9 +30,13 @@ namespace ProceduralAnimation
 
             _velocity = Vector3.ClampMagnitude(_velocity + acceleration * Time.deltaTime, _maxSpeed);
 
-            this.Position += _velocity * Time.deltaTime;
+            _velocity = _velocity.ElementWiseMultiplication(_velocityWeights);
 
-            this.Transform.LookAt(this.Position + _velocity);
+            Vector3 position = this.Position + _velocity * Time.deltaTime;
+
+            this.Position = position.ClampBetween(_positionMinConstraints, _positionMaxConstraints);
+
+            //this.Transform.LookAt(this.Position + _velocity);
         }
     }
 }

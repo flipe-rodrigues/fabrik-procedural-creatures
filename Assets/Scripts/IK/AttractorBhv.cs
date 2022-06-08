@@ -9,11 +9,11 @@ namespace ProceduralAnimation
     {
         // Serialized fields
         [SerializeField] private TargetBhv _target;
-        [SerializeField] private bool _lookAtTarget;
         [SerializeField] private bool _projectOntoTerrain;
         [SerializeField] private AnimationCurve _lerpCurve = new AnimationCurve(new Keyframe(0, 0), new Keyframe(1, 1));
         [SerializeField] private AnimationCurve _heightCurve = new AnimationCurve(new Keyframe(0, 0), new Keyframe(.5f, .5f), new Keyframe(1, 0));
         [SerializeField] private float _lerpSpeed = 1;
+        public AttractorBhv contralateralAttractor;
 
         // Public properties
         public TargetBhv Target => _target;
@@ -21,11 +21,14 @@ namespace ProceduralAnimation
         public bool IsAttracting => _lerp < 1;
         public Vector3 EffectivePosition { get => _effectivePosition; }
 
+        // Private properties
+        private bool IsGrounded => this.IK.IsGrounded && (contralateralAttractor == null ? true : !contralateralAttractor.IsAttracting);
+
         // Private fields
         private Vector3 _effectivePosition;
         private Vector3 _currentPosition;
+        private Vector3 _nextPosition;
         private Vector3 _previousPosition;
-        private Vector3 _nextForward;
         private Vector3 _currentForward;
         private Vector3 _previousForward;
         private float _lerp = Mathf.Infinity;
@@ -40,9 +43,19 @@ namespace ProceduralAnimation
             EditorApplication.update -= this.Update;
         }
 
+        private void OnValidate()
+        {
+            if (contralateralAttractor != null && contralateralAttractor.contralateralAttractor == null)
+            {
+                contralateralAttractor.contralateralAttractor = this;
+            }
+        }
+
         private void Start()
         {
             _currentPosition = _target.Position;
+
+            _nextPosition = _target.Position;
 
             _previousPosition = _target.Position;
 
@@ -61,11 +74,6 @@ namespace ProceduralAnimation
             this.UpdateEffectivePosition();
 
             this.UpdateAttraction();
-
-            if (_lookAtTarget)
-            {
-                //this.LookAtTarget();
-            }
         }
 
         private void UpdateEffectivePosition()
@@ -83,7 +91,7 @@ namespace ProceduralAnimation
 
         private void UpdateAttraction()
         {
-            if (Vector3.Distance(_target.Position, _effectivePosition) >= _target.DeadZoneRadius && _lerp >= 1 && this.IK.IsGrounded)
+            if (Vector3.Distance(_target.Position, _effectivePosition) >= _target.DeadZoneRadius && _lerp >= 1 && this.IsGrounded)
             {
                 _lerp = 0;
 
@@ -91,7 +99,7 @@ namespace ProceduralAnimation
 
                 _previousForward = _target.Forward;
 
-                _nextForward = this.Forward;
+                _nextPosition = _effectivePosition;
             }
 
             if (_lerp < 1)
@@ -105,7 +113,7 @@ namespace ProceduralAnimation
                     _currentPosition.y += _heightCurve.Evaluate(_lerp);
                 }
 
-                _currentForward = Vector3.Lerp(_previousForward, _nextForward, _lerpCurve.Evaluate(_lerp));
+                _currentForward = Vector3.Lerp(_previousForward, this.Forward, _lerpCurve.Evaluate(_lerp));
             }
 
             if (Selection.Contains(_target.gameObject))
@@ -116,11 +124,6 @@ namespace ProceduralAnimation
             _target.Position = _currentPosition;
 
             _target.Forward = _currentForward;
-        }
-
-        private void LookAtTarget()
-        {
-            this.Transform.LookAt(this.Target.Position);
         }
 
         public bool Raycast(out RaycastHit hitInfo)

@@ -98,6 +98,11 @@ namespace ProceduralAnimation
             return new Vector3(v.x * u.x, v.y * u.y, v.z * u.z);
         }
 
+        public static Vector3 ClampBetween(this Vector3 v, Vector3 min, Vector3 max)
+        {
+            return new Vector3(Mathf.Clamp(v.x, min.x, max.x), Mathf.Clamp(v.y, min.y, max.y), Mathf.Clamp(v.z, min.z, max.z));
+        }
+
         public static Color SetAlpha(this Color color, float alpha)
         {
             color.a = alpha;

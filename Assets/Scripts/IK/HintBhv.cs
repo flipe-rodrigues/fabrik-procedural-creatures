@@ -9,7 +9,6 @@ namespace ProceduralAnimation
     {
         // Serialized fields
         [SerializeField] private ChainBhv _chain;
-        [SerializeField] private bool _lookAtChain;
 
         // Public properties
         public ChainBhv Chain { get => _chain; set => _chain = value; }
@@ -21,11 +20,6 @@ namespace ProceduralAnimation
         private void Update()
         {
             this.UpdateEffectivePosition();
-
-            if (_lookAtChain)
-            {
-                this.LookAtChain();
-            }
         }
 
         private void UpdateEffectivePosition()
@@ -39,11 +33,6 @@ namespace ProceduralAnimation
             {
                 _effectivePosition = hitInfo.point + this.IK.TerrainOffset * Vector3.up;
             }
-        }
-
-        private void LookAtChain()
-        {
-            this.Transform.LookAt(this.Chain.Position);
         }
 
         public override void UpdateName()

@@ -13,9 +13,9 @@ namespace ProceduralAnimation
         {
             base.OnInspectorGUI();
 
-            //foreach (ChainGenerator chainGenerator in targets as ChainGenerator[])
+            foreach (Object targetObject in targets)
             {
-                ChainGenerator chainGenerator = target as ChainGenerator;
+                ChainGenerator chainGenerator = targetObject as ChainGenerator;
 
                 GUILayout.BeginHorizontal();
 

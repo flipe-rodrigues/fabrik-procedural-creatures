@@ -22,7 +22,7 @@ namespace ProceduralAnimation
         public bool SnapToTerrain => _snapToTerrain;
         public LayerMask TerrainLayerMask => _terrainLayerMask;
         public float TerrainOffset => _terrainOffset;
-        public bool IsGrounded => _attractors.Where(attractor => attractor.ProjectOntoTerrain).All(attractor => !attractor.IsAttracting);
+        public bool IsGrounded => _attractors.Where(attractor => attractor.ProjectOntoTerrain).Any(attractor => !attractor.IsAttracting);
 
         // Private properties
         private ChainBhv[] Chains
