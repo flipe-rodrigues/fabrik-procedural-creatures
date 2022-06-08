@@ -12,7 +12,7 @@ namespace ProceduralAnimation
         [SerializeField, Range(0, 1)] private float _deadZoneAlphaMultiplier = .5f;
 
         // Public properties
-        public override bool IsActive { get => this.Target.IsActive; }
+        public override bool IsActive { get => this.Target.isActiveAndEnabled; }
 
         // Private properties
         private TargetBhv Target

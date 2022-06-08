@@ -110,7 +110,7 @@ namespace ProceduralAnimation
                 this.SnapshotIK(chain);
             }
 
-            foreach (TargetBhv target in this.Targets.Where(target => target.IsActive).OrderBy(target => target.Priority))
+            foreach (TargetBhv target in this.Targets.Where(target => target.isActiveAndEnabled).OrderBy(target => target.Priority))
             {
                 this.ResolveIK(target.Effector, target);
             }

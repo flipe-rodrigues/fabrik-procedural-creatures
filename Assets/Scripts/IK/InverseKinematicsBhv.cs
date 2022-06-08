@@ -29,7 +29,7 @@ namespace ProceduralAnimation
         {
             get
             {
-                if (!Application.isPlaying || _chains == null || _chains.Length == 0)
+                if (_chains == null || _chains.Length == 0)
                 {
                     _chains = this.GetComponentsInChildren<ChainBhv>();
                 }
@@ -41,7 +41,7 @@ namespace ProceduralAnimation
         {
             get
             {
-                if (!Application.isPlaying || _joints == null || _chains.Length == 0)
+                if (_joints == null || _chains.Length == 0)
                 {
                     _joints = this.GetComponentsInChildren<JointBhv>();
                 }
@@ -53,7 +53,7 @@ namespace ProceduralAnimation
         {
             get
             {
-                if (!Application.isPlaying || _targets == null || _targets.Length == 0)
+                if (_targets == null || _targets.Length == 0)
                 {
                     _targets = this.GetComponentsInChildren<TargetBhv>();
                 }
@@ -69,7 +69,7 @@ namespace ProceduralAnimation
         {
             get
             {
-                if (!Application.isPlaying || _attractors == null || _attractors.Length == 0)
+                if (_attractors == null || _attractors.Length == 0)
                 {
                     _attractors = this.GetComponentsInChildren<AttractorBhv>();
                 }
@@ -85,7 +85,7 @@ namespace ProceduralAnimation
         {
             get
             {
-                if (!Application.isPlaying || _hints == null || _hints.Length == 0)
+                if (_hints == null || _hints.Length == 0)
                 {
                     _hints = this.GetComponentsInChildren<HintBhv>();
                 }
@@ -105,7 +105,22 @@ namespace ProceduralAnimation
         [SerializeField, ReadOnly] private AttractorBhv[] _attractors;
         [SerializeField, ReadOnly] private HintBhv[] _hints;
 
-        private void Awake()
+        public void ResetIKElements()
+        {
+            _chains = null;
+
+            _joints = null;
+
+            _targets = null;
+
+            _attractors = null;
+
+            _hints = null;
+
+            this.Start();
+        }
+
+        private void Start()
         {
             _chains = this.Chains;
 
@@ -152,7 +167,7 @@ namespace ProceduralAnimation
             for (int i = 0; i < _maxIterations; i++)
             {
                 //foreach (TargetBhv target in this.Targets.Where(target => target.IsActive && target.Effector != null).OrderByDescending(target => target.Effector.Chain.Depth))
-                foreach (TargetBhv target in this.Targets.Where(target => target.IsActive && target.Effector != null).OrderBy(target => target.Priority))
+                foreach (TargetBhv target in this.Targets.Where(target => target.isActiveAndEnabled && target.Effector != null).OrderBy(target => target.Priority))
                 {
                     JointBhv effector = target.Effector;
 
@@ -174,7 +189,7 @@ namespace ProceduralAnimation
 
         private void BendIK()
         {
-            foreach (HintBhv hint in this.Hints.Where(hint => hint.IsActive && hint.Chain != null))
+            foreach (HintBhv hint in this.Hints.Where(hint => hint.isActiveAndEnabled && hint.Chain != null))
             {
                 for (int i = 1; i < hint.Chain.Joints.Length - 1; i++)
                 {

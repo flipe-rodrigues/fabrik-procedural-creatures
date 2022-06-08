@@ -10,13 +10,11 @@ namespace ProceduralAnimation
     {
         // Serialized fields
         [SerializeField] private JointBhv _effector;
-        [SerializeField] private bool _isActive;
         [SerializeField, Min(0)] private int _priority;
         [SerializeField, Min(0)] private float _deadZoneRadius;
 
         // Public properties
         public JointBhv Effector { get => _effector; set => _effector = value; }
-        public bool IsActive { get => _isActive; }
         public int Priority { get => _priority; }
         public float DeadZoneRadius { get => _deadZoneRadius; }
         public Vector3 EffectivePosition { get => _effectivePosition; }

@@ -9,7 +9,7 @@ namespace ProceduralAnimation
     public class HintGizmoBhv : GizmoBhv
     {
         // Public properties
-        public override bool IsActive { get => this.Hint.IsActive; }
+        public override bool IsActive { get => this.Hint.isActiveAndEnabled; }
 
         // Private properties
         private HintBhv Hint
@@ -41,8 +41,6 @@ namespace ProceduralAnimation
 
                 Gizmos.DrawLine(this.Hint.Position, this.Hint.EffectivePosition);
             }
-
-            this.Transform.LookAt(this.Hint.Chain.Position);
 
             base.OnDrawGizmos();
         }

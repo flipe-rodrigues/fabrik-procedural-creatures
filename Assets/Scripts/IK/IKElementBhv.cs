@@ -30,12 +30,27 @@ namespace ProceduralAnimation
             _inverseKinematics = this.IK;
         }
 
+        private void OnEnable()
+        {
+            IK.ResetIKElements();
+        }
+
         public virtual void LateUpdate()
         {
             if (!Application.isPlaying)
             {
                 this.UpdateName();
             }
+        }
+        
+        private void OnDisable()
+        {
+            IK.ResetIKElements();
+        }
+
+        private void OnDestroy()
+        {
+            IK.ResetIKElements();
         }
 
         public abstract void UpdateName();

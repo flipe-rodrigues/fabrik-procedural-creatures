@@ -9,6 +9,7 @@ namespace ProceduralAnimation
     {
         // Serialized fields
         [SerializeField] private TargetBhv _target;
+        [SerializeField] private bool _lookAtTarget;
         [SerializeField] private bool _projectOntoTerrain;
         [SerializeField] private AnimationCurve _lerpCurve = new AnimationCurve(new Keyframe(0, 0), new Keyframe(1, 1));
         [SerializeField] private AnimationCurve _heightCurve = new AnimationCurve(new Keyframe(0, 0), new Keyframe(.5f, .5f), new Keyframe(1, 0));
@@ -24,7 +25,9 @@ namespace ProceduralAnimation
         private Vector3 _effectivePosition;
         private Vector3 _currentPosition;
         private Vector3 _previousPosition;
-        private Vector3 _currentLocalPosition;
+        private Vector3 _nextForward;
+        private Vector3 _currentForward;
+        private Vector3 _previousForward;
         private float _lerp = Mathf.Infinity;
 
         private void OnEnable()
@@ -43,7 +46,9 @@ namespace ProceduralAnimation
 
             _previousPosition = _target.Position;
 
-            _currentLocalPosition = _target.LocalPosition;
+            _previousForward = _target.Forward;
+
+            _currentForward = _target.Forward;
         }
 
         private void Update()
@@ -56,6 +61,11 @@ namespace ProceduralAnimation
             this.UpdateEffectivePosition();
 
             this.UpdateAttraction();
+
+            if (_lookAtTarget)
+            {
+                //this.LookAtTarget();
+            }
         }
 
         private void UpdateEffectivePosition()
@@ -78,6 +88,10 @@ namespace ProceduralAnimation
                 _lerp = 0;
 
                 _previousPosition = _target.Position;
+
+                _previousForward = _target.Forward;
+
+                _nextForward = this.Forward;
             }
 
             if (_lerp < 1)
@@ -91,7 +105,7 @@ namespace ProceduralAnimation
                     _currentPosition.y += _heightCurve.Evaluate(_lerp);
                 }
 
-                _currentLocalPosition = _target.Parent.InverseTransformPoint(_currentPosition);
+                _currentForward = Vector3.Lerp(_previousForward, _nextForward, _lerpCurve.Evaluate(_lerp));
             }
 
             if (Selection.Contains(_target.gameObject))
@@ -99,9 +113,14 @@ namespace ProceduralAnimation
                 this.Start();
             }
 
-            _target.LocalPosition = _currentLocalPosition;
+            _target.Position = _currentPosition;
 
-            _target.Forward = this.Forward;
+            _target.Forward = _currentForward;
+        }
+
+        private void LookAtTarget()
+        {
+            this.Transform.LookAt(this.Target.Position);
         }
 
         public bool Raycast(out RaycastHit hitInfo)

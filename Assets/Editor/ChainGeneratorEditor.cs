@@ -13,8 +13,10 @@ namespace ProceduralAnimation
         {
             base.OnInspectorGUI();
 
-            foreach (ChainGenerator chainGenerator in targets as ChainGenerator[])
+            //foreach (ChainGenerator chainGenerator in targets as ChainGenerator[])
             {
+                ChainGenerator chainGenerator = target as ChainGenerator;
+
                 GUILayout.BeginHorizontal();
 
                 if (GUILayout.Button("Sample Link Scales"))

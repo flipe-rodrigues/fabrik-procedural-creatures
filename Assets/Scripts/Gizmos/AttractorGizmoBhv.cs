@@ -9,7 +9,7 @@ namespace ProceduralAnimation
     public class AttractorGizmoBhv : GizmoBhv
     {
         // Public properties
-        public override bool IsActive { get => true; }
+        public override bool IsActive { get => this.Attractor.isActiveAndEnabled; }
 
         // Private properties
         private AttractorBhv Attractor

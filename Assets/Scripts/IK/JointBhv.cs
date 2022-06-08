@@ -22,7 +22,7 @@ namespace ProceduralAnimation
         {
             get
             {
-                if (!Application.isPlaying || _upstreamJoints == null || _upstreamJoints.Length == 0)
+                if (_upstreamJoints == null || _upstreamJoints.Length == 0)
                 {
                     if (this.GetComponentsInParentsExclusively<JointBhv>().Length > 0)
                     {
@@ -37,7 +37,7 @@ namespace ProceduralAnimation
         {
             get
             {
-                if (!Application.isPlaying || _downstreamJoints == null || _downstreamJoints.Length == 0)
+                if (_downstreamJoints == null || _downstreamJoints.Length == 0)
                 {
                     if (this.GetComponentsInChildrenExclusively<JointBhv>().Length > 0)
                     {
@@ -86,8 +86,6 @@ namespace ProceduralAnimation
 
                 _downstreamJoints = this.DownstreamJoints;
 
-                this.UpdateType();
-
                 _link = this.Link;
             }
         }
@@ -107,48 +105,21 @@ namespace ProceduralAnimation
             this.name = prefix + "Joint " + "(" + this.Chain.name + " - " + this.Index + ")";
         }
 
-        private void UpdateType()
-        {
-            if (this.UpstreamJoints.Length == 0)
-            {
-                _type = JointType.Root;
-            }
-            else if (this.DownstreamJoints.Any(joint => joint.Chain != this.Chain))
-            {
-                _type = JointType.Intersection;
-            }
-            else
-            {
-                if (this.DownstreamJoints.Length == 0)
-                {
-                    _type = JointType.Leaf;
-                }
-                else if (this.DownstreamJoints.Length == 1)
-                {
-                    _type = JointType.Regular;
-                }
-                else
-                {
-                    _type = JointType.Intersection;
-                }
-            }
-        }
-
         public void PropagateUpstream()
         {
             foreach (JointBhv upstreamJoint in this.UpstreamJoints)
             {
-                if (!upstreamJoint.HasLink) // || upstreamJoint.Chain != this.Chain)
-                {
-                    continue;
-                }
-
                 if (upstreamJoint.IsIntersection)
                 {
                     upstreamJoint.TentativePosition = upstreamJoint.DownstreamJoints.Select(joint => joint.TentativePosition).Mean();
                 }
                 else
                 {
+                    if (!upstreamJoint.HasLink)
+                    {
+                        continue;
+                    }
+
                     Vector3 direction = (upstreamJoint.TentativePosition - this.TentativePosition).normalized;
 
                     upstreamJoint.TentativePosition = this.TentativePosition + upstreamJoint.Link.Length * direction;
@@ -162,17 +133,17 @@ namespace ProceduralAnimation
         {
             foreach (JointBhv downstreamJoint in this.DownstreamJoints)
             {
-                if (!this.HasLink) // || downstreamJoint.Chain != this.Chain)
-                {
-                    continue;
-                }
-
                 if (downstreamJoint.IsBranch)
                 {
                     downstreamJoint.TentativePosition = downstreamJoint.UpstreamJoints.First().TentativePosition;
                 }
                 else
                 {
+                    if (!this.HasLink)
+                    {
+                        continue;
+                    }
+
                     Vector3 direction = (downstreamJoint.TentativePosition - this.TentativePosition).normalized;
 
                     downstreamJoint.TentativePosition = this.TentativePosition + this.Link.Length * direction;
