@@ -6,6 +6,6 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/Scenes/SplitBelt.unity
-    guid: ebb45f2e3a8d15941879642033fc91d0
+    path: Assets/Scenes/5 - Collective.unity
+    guid: eea888530af865a4598dfd0d67488535
   m_configObjects: {}

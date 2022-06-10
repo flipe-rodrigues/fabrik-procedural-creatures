@@ -1,5 +1,7 @@
 using UnityEngine;
+#if UNITY_EDITOR
 using UnityEditor;
+#endif
 
 namespace ProceduralAnimation
 {
@@ -27,12 +29,12 @@ namespace ProceduralAnimation
         // Private fields
         private Vector3 _effectivePosition;
         private Vector3 _currentPosition;
-        private Vector3 _nextPosition;
         private Vector3 _previousPosition;
         private Vector3 _currentForward;
         private Vector3 _previousForward;
         private float _lerp = Mathf.Infinity;
 
+#if UNITY_EDITOR
         private void OnEnable()
         {
             EditorApplication.update += this.Update;
@@ -42,7 +44,7 @@ namespace ProceduralAnimation
         {
             EditorApplication.update -= this.Update;
         }
-
+#endif
         private void OnValidate()
         {
             if (contralateralAttractor != null && contralateralAttractor.contralateralAttractor == null)
@@ -54,8 +56,6 @@ namespace ProceduralAnimation
         private void Start()
         {
             _currentPosition = _target.Position;
-
-            _nextPosition = _target.Position;
 
             _previousPosition = _target.Position;
 
@@ -98,8 +98,6 @@ namespace ProceduralAnimation
                 _previousPosition = _target.Position;
 
                 _previousForward = _target.Forward;
-
-                _nextPosition = _effectivePosition;
             }
 
             if (_lerp < 1)
