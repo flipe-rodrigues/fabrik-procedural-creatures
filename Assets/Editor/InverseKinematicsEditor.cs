@@ -5,6 +5,7 @@ using UnityEditor;
 
 namespace ProceduralAnimation
 {
+    [CanEditMultipleObjects]
     [CustomEditor(typeof(InverseKinematicsBhv))]
     public class InverseKinematicsEditor : Editor
     {

@@ -109,5 +109,17 @@ namespace ProceduralAnimation
 
             return color;
         }
+
+        public static Vector3 AverageTentativePosition(this JointBhv[] joints)
+        {
+            Vector3 average = Vector3.zero;
+
+            foreach(JointBhv joint in joints)
+            {
+                average += joint.TentativePosition / joints.Length;
+            }
+
+            return average;
+        }
     }
 }

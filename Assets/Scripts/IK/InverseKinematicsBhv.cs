@@ -49,13 +49,14 @@ namespace ProceduralAnimation
                 return _joints;
             }
         }
-        public TargetBhv[] Targets
+        private TargetBhv[] Targets
         {
             get
             {
                 if (_targets == null || _targets.Length == 0)
                 {
-                    _targets = this.GetComponentsInChildren<TargetBhv>();
+                    _targets = this.GetComponentsInChildren<TargetBhv>().
+                        Where(target => target.isActiveAndEnabled && target.Effector != null).OrderBy(target => target.Priority).ToArray();
                 }
 
                 return _targets;
@@ -65,7 +66,7 @@ namespace ProceduralAnimation
                 _targets = value;
             }
         }
-        public AttractorBhv[] Attractors
+        private AttractorBhv[] Attractors
         {
             get
             {
@@ -81,13 +82,13 @@ namespace ProceduralAnimation
                 _attractors = value;
             }
         }
-        public HintBhv[] Hints
+        private HintBhv[] Hints
         {
             get
             {
                 if (_hints == null || _hints.Length == 0)
                 {
-                    _hints = this.GetComponentsInChildren<HintBhv>();
+                    _hints = this.GetComponentsInChildren<HintBhv>().Where(hint => hint.isActiveAndEnabled && hint.Chain != null).ToArray();
                 }
 
                 return _hints;
@@ -97,6 +98,18 @@ namespace ProceduralAnimation
                 _hints = value;
             }
         }
+        private JointBhv Root
+        {
+            get
+            {
+                if (_rootJoint == null)
+                {
+                    _rootJoint = this.Joints.Where(joint => joint.IsRoot).First();
+                }
+
+                return _rootJoint;
+            }
+        }
 
         // Private fields
         [SerializeField, ReadOnly] private ChainBhv[] _chains;
@@ -104,6 +117,12 @@ namespace ProceduralAnimation
         [SerializeField, ReadOnly] private TargetBhv[] _targets;
         [SerializeField, ReadOnly] private AttractorBhv[] _attractors;
         [SerializeField, ReadOnly] private HintBhv[] _hints;
+        private JointBhv _rootJoint;
+
+        private void Awake()
+        {
+            this.ResetIKElements();
+        }
 
         public void ResetIKElements()
         {
@@ -166,30 +185,25 @@ namespace ProceduralAnimation
         {
             for (int i = 0; i < _maxIterations; i++)
             {
-                //foreach (TargetBhv target in this.Targets.Where(target => target.IsActive && target.Effector != null).OrderByDescending(target => target.Effector.Chain.Depth))
-                foreach (TargetBhv target in this.Targets.Where(target => target.isActiveAndEnabled && target.Effector != null).OrderBy(target => target.Priority))
+                foreach (TargetBhv target in this.Targets)
                 {
-                    JointBhv effector = target.Effector;
+                    target.Effector.TentativePosition = target.EffectivePosition;
 
-                    effector.TentativePosition = target.EffectivePosition;
-
-                    effector.PropagateUpstream();
+                    target.Effector.PropagateUpstream();
                 }
-
-                JointBhv root = this.Joints.Where(joint => joint.IsRoot).First();
 
                 if (_rootIsFixed)
                 {
-                    root.TentativePosition = root.Position;
+                    this.Root.TentativePosition = this.Root.Position;
                 }
 
-                root.PropagateDownstream();
+                this.Root.PropagateDownstream();
             }
         }
 
         private void BendIK()
         {
-            foreach (HintBhv hint in this.Hints.Where(hint => hint.isActiveAndEnabled && hint.Chain != null))
+            foreach (HintBhv hint in this.Hints)
             {
                 for (int i = 1; i < hint.Chain.Joints.Length - 1; i++)
                 {
@@ -232,9 +246,16 @@ namespace ProceduralAnimation
 
                 up = _snapToTerrain ? joint.TentativeUpDirection : Vector3.up;
 
-                joint.Rotation = Quaternion.LookRotation(forward, up);
+                if (forward.sqrMagnitude > 0)
+                {
+                    joint.TentativeRotation = Quaternion.LookRotation(forward, up);
+                }
+                else
+                {
+                    joint.TentativeRotation = Quaternion.identity;
+                }
 
-                joint.Position = joint.TentativePosition;
+                joint.SetPositionAndRotation(joint.TentativePosition, joint.TentativeRotation);
             }
         }
     }
