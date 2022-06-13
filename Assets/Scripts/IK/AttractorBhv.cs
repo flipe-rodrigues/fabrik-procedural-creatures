@@ -27,11 +27,11 @@ namespace ProceduralAnimation
         private bool IsGrounded => this.IK.IsGrounded && (contralateralAttractor == null ? true : !contralateralAttractor.IsAttracting);
 
         // Private fields
-        private Vector3 _effectivePosition;
-        private Vector3 _currentPosition;
-        private Vector3 _previousPosition;
-        private Vector3 _currentForward;
-        private Vector3 _previousForward;
+        private Vector3 _effectivePosition = Vector3.zero;
+        private Vector3 _currentPosition = Vector3.zero;
+        private Vector3 _previousPosition = Vector3.zero;
+        private Vector3 _currentForward= Vector3.forward;
+        private Vector3 _previousForward = Vector3.forward;
         private float _lerp = Mathf.Infinity;
 
 #if UNITY_EDITOR
