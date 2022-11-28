@@ -28,6 +28,23 @@ namespace ProceduralAnimation
         }
         public float Length => this.LocalScale.z * (1 - _degreeOfOverlap);
 
+        // Private fields
+        public float fadeSpeed = 10;
+        public MeshRenderer MeshRenderer => _meshRenderer;
+        private MeshRenderer _meshRenderer;
+
+        private void Update()
+        {
+            Color lerpColor = Color.Lerp(_meshRenderer.material.GetColor("_EmissionColor"), Color.clear, Time.deltaTime * fadeSpeed);
+
+            _meshRenderer.material.SetColor("_EmissionColor", lerpColor);
+        }
+
+        private void Awake()
+        {
+            _meshRenderer = this.GetComponent<MeshRenderer>();
+        }
+
         public void PseudoConstructor(ChainBhv chain, int index, Vector3 scale)
         {
             base.PseudoConstructor(chain, index);
