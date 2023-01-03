@@ -24,7 +24,7 @@ namespace ProceduralAnimation
         public Vector3 EffectivePosition { get => _effectivePosition; }
 
         // Private properties
-        private bool IsGrounded => this.IK.IsGrounded && (contralateralAttractor == null ? true : !contralateralAttractor.IsAttracting);
+        private bool IsGrounded => true; //this.IK.IsGrounded && (contralateralAttractor == null ? true : !contralateralAttractor.IsAttracting);
 
         // Private fields
         private Vector3 _effectivePosition = Vector3.zero;
