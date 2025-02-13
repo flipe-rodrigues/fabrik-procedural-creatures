@@ -222,7 +222,6 @@ namespace ProceduralAnimation
             }
         }
 
-
         private void SnapIKToTerrain()
         {
             foreach (JointBhv joint in this.Joints)
