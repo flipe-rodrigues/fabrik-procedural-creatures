@@ -35,9 +35,9 @@ namespace ProceduralAnimation
 
         private void Update()
         {
-            Color lerpColor = Color.Lerp(_meshRenderer.material.GetColor("_EmissionColor"), Color.clear, Time.deltaTime * fadeSpeed);
+            //Color lerpColor = Color.Lerp(_meshRenderer.material.GetColor("_EmissionColor"), Color.clear, Time.deltaTime * fadeSpeed);
 
-            _meshRenderer.material.SetColor("_EmissionColor", lerpColor);
+            //_meshRenderer.material.SetColor("_EmissionColor", lerpColor);
         }
 
         private void Awake()
