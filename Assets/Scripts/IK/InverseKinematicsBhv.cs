@@ -154,10 +154,10 @@ namespace ProceduralAnimation
 
         private void LateUpdate()
         {
-            this.FRIK();
+            this.FABRIK();
         }
 
-        private void FRIK()
+        private void FABRIK()
         {
             this.SnapshotIK();
 
