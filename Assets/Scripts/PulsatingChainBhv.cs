@@ -56,23 +56,23 @@ namespace ProceduralAnimation
                 _chain.Links[i].MeshRenderer.material.SetColor("_EmissionColor", emissionColor);
             }
 
-            //for (int i = 0; i < _chain.Links.Length; i++)
-            //{
-            //    float lerp = 0;
+            for (int i = 0; i < _chain.Links.Length; i++)
+            {
+                float lerp = 0;
 
-            //    while (lerp <= 1)
-            //    {
-            //        Color lerpColor = Color.Lerp(emissionColor, Color.clear, curve.Evaluate(lerp));
+                while (lerp <= 1)
+                {
+                    Color lerpColor = Color.Lerp(emissionColor, Color.clear, curve.Evaluate(lerp));
 
-            //        _chain.Links[i].MeshRenderer.material.SetColor("_EmissionColor", lerpColor);
+                    _chain.Links[i].MeshRenderer.material.SetColor("_EmissionColor", lerpColor);
 
-            //        lerp += Time.deltaTime * fallSpeed;
+                    lerp += Time.deltaTime * fallSpeed;
 
-            //        yield return null;
-            //    }
+                    yield return null;
+                }
 
-            //    _chain.Links[i].MeshRenderer.material.SetColor("_EmissionColor", Color.clear);
-            //}
+                _chain.Links[i].MeshRenderer.material.SetColor("_EmissionColor", Color.clear);
+            }
         }
 
         private IEnumerator FadeIn()
