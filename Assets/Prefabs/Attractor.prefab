@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 6059174906084927404}
   - component: {fileID: 2985568769589126040}
   - component: {fileID: 3112388466545468508}
+  - component: {fileID: -6382357471539544794}
   m_Layer: 0
   m_Name: Attractor
   m_TagString: Untagged
@@ -126,3 +127,15 @@ MonoBehaviour:
   _wireAlphaMultiplier: 1
   _activeScaleMultiplier: {x: 0.5, y: 0.5, z: 0.5}
   _inactiveScaleMultiplier: {x: 0.5, y: 0.5, z: 0.5}
+--- !u!114 &-6382357471539544794
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7135355488032723047}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e960e3d671f208a49abb14e3c9c5e9ac, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

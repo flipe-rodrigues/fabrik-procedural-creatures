@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 5281023366580747780}
   - component: {fileID: 6068814572032261697}
   - component: {fileID: 237388873608471711}
+  - component: {fileID: 3292591758848008122}
   m_Layer: 0
   m_Name: Target
   m_TagString: Untagged
@@ -69,3 +70,15 @@ MonoBehaviour:
   _activeScaleMultiplier: {x: 0.5, y: 0.5, z: 0.5}
   _inactiveScaleMultiplier: {x: 0.25, y: 0.25, z: 0.25}
   _deadZoneAlphaMultiplier: 0.5
+--- !u!114 &3292591758848008122
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2498416171925618056}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e960e3d671f208a49abb14e3c9c5e9ac, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
