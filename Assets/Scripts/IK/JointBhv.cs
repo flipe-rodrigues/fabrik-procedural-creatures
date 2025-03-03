@@ -6,7 +6,7 @@ using UnityEditor;
 
 namespace ProceduralAnimation
 {
-    [SelectionBase]
+    //[SelectionBase]
     [ExecuteInEditMode]
     public class JointBhv : ChainElementBhv
     {

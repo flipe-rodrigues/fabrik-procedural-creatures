@@ -2,6 +2,7 @@ using System.Linq;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using static UnityEngine.GraphicsBuffer;
 
 namespace ProceduralAnimation
 {
@@ -11,15 +12,26 @@ namespace ProceduralAnimation
         // Serialized fields
         [SerializeField] private JointBhv _effector;
         [SerializeField, Min(0)] private int _priority;
-        [SerializeField, Min(0)] private float _deadZoneRadius;
 
         // Public properties
         public JointBhv Effector { get => _effector; set => _effector = value; }
+        public GizmoBhv Gizmo
+        {
+            get
+            {
+                if (_gizmo == null)
+                {
+                    _gizmo = this.GetComponent<GizmoBhv>();
+                }
+
+                return _gizmo;
+            }
+        }
         public int Priority { get => _priority; }
-        public float DeadZoneRadius { get => _deadZoneRadius; }
         public Vector3 EffectivePosition { get => _effectivePosition; }
 
         // Private fields
+        private GizmoBhv _gizmo;
         private Vector3 _effectivePosition;
 
         public void PseudoConstructor(JointBhv endEffector)

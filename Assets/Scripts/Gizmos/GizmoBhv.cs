@@ -18,12 +18,12 @@ namespace ProceduralAnimation
         [SerializeField] private Vector3 _inactiveScaleMultiplier = .5f * Vector3.one;
 
         // Public properties
+        public Mesh Mesh => _mesh;
         public abstract bool IsActive { get; }
         public Color FaceColor => this.Color.SetAlpha(this.Color.a * _faceAlphaMultiplier);
         public Color WireColor => this.Color.SetAlpha(this.Color.a * _wireAlphaMultiplier);
 
         // Protected properties
-        protected Mesh Mesh => _mesh;
         protected Color Color => this.IsActive ? _activeColor : _inactiveColor;
         protected Vector3 Scale => (this.IsActive ? _activeScaleMultiplier : _inactiveScaleMultiplier).ElementWiseMultiplication(this.LocalScale);
 

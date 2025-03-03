@@ -855,11 +855,11 @@ PlayerSettings:
     m_VersionName: 
   apiCompatibilityLevel: 6
   activeInputHandler: 0
-  cloudProjectId: 
+  cloudProjectId: 66b76215-8b0d-4cf5-b962-e9ecf74ef149
   framebufferDepthMemorylessMode: 0
   qualitySettingsNames: []
-  projectName: 
-  organizationId: 
+  projectName: fabrik-procedural-creatures
+  organizationId: flipe
   cloudEnabled: 0
   legacyClampBlendShapeWeights: 0
   playerDataPath: 

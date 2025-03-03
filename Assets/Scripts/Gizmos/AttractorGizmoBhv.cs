@@ -8,6 +8,9 @@ namespace ProceduralAnimation
     [RequireComponent(typeof(AttractorBhv))]
     public class AttractorGizmoBhv : GizmoBhv
     {
+        // Serialized fields
+        [SerializeField, Range(0, 1)] private float _deadZoneAlphaMultiplier = .5f;
+
         // Public properties
         public override bool IsActive { get => this.Attractor.isActiveAndEnabled; }
 
@@ -66,6 +69,16 @@ namespace ProceduralAnimation
             }
 
             base.OnDrawGizmos();
+
+            Gizmos.matrix = Matrix4x4.TRS(this.Attractor.Target.Position, this.Rotation, this.Attractor.DeadZoneRadius * 2 * Vector3.one);
+
+            Gizmos.color = this.FaceColor.SetAlpha(this.FaceColor.a * _deadZoneAlphaMultiplier);
+
+            Gizmos.DrawMesh(this.Attractor.Target.Gizmo.Mesh);
+
+            Gizmos.color = this.WireColor.SetAlpha(this.WireColor.a * _deadZoneAlphaMultiplier);
+
+            Gizmos.DrawWireMesh(this.Attractor.Target.Gizmo.Mesh);
         }
     }
 }

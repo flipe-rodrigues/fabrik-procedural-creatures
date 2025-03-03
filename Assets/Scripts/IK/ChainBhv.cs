@@ -2,6 +2,7 @@ using System.Linq;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEditor;
 
 namespace ProceduralAnimation
 {
@@ -72,6 +73,12 @@ namespace ProceduralAnimation
 
             _links = this.Links;
         }
+
+        private void Start()
+        {
+            SceneVisibilityManager.instance.TogglePicking(this.gameObject, true);
+        }
+
 
         private void LateUpdate()
         {

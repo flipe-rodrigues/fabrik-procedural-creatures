@@ -14,11 +14,13 @@ namespace ProceduralAnimation
         [SerializeField] private bool _projectOntoTerrain;
         [SerializeField] private AnimationCurve _lerpCurve = new AnimationCurve(new Keyframe(0, 0), new Keyframe(1, 1));
         [SerializeField] private AnimationCurve _heightCurve = new AnimationCurve(new Keyframe(0, 0), new Keyframe(.5f, .5f), new Keyframe(1, 0));
+        [SerializeField, Min(0)] private float _deadZoneRadius;
         [SerializeField] private float _lerpSpeed = 1;
         public AttractorBhv contralateralAttractor;
 
         // Public properties
         public TargetBhv Target => _target;
+        public float DeadZoneRadius { get => _deadZoneRadius; }
         public bool ProjectOntoTerrain => _projectOntoTerrain;
         public bool IsAttracting => _lerp < 1;
         public Vector3 EffectivePosition { get => _effectivePosition; }
@@ -91,7 +93,7 @@ namespace ProceduralAnimation
 
         private void UpdateAttraction()
         {
-            if (Vector3.Distance(_target.Position, _effectivePosition) >= _target.DeadZoneRadius && _lerp >= 1 && this.IsGrounded)
+            if (Vector3.Distance(_target.Position, _effectivePosition) >= _deadZoneRadius && _lerp >= 1 && this.IsGrounded)
             {
                 _lerp = 0;
 
